@@ -2,5 +2,6 @@ from blinker import Namespace
 
 
 flasktasks_signals = Namespace()
-task_created = flasktasks_signals.signal('task-created')
-mission_created = flasktasks_signals.signal('mission-created')
+event_created = flasktasks_signals.signal('event-created')
+castmember_created = flasktasks_signals.signal('castmember-created')
+storyline_created = flasktasks_signals.signal('storyline-created')

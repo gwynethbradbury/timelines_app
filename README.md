@@ -49,5 +49,5 @@ There is no script to run all tests at once yet, since FlaskTasks still does not
 
 ```
 python -m flasktasks.tests.tags_tests
-python -m flasktasks.tests.missions_tests
+python -m flasktasks.tests.storyliness_tests
 ```

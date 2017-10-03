@@ -1,17 +1,22 @@
 from flasktasks import app, db
 from flasktasks.models import LogEntry
-from flasktasks.signals import task_created, mission_created 
+from flasktasks.signals import event_created, storyline_created, castmember_created
 
 
-@task_created.connect
-def log_task_creation(task, **kwargs):
-    message = "The task \"%s\" was created." % task.title
+@event_created.connect
+def log_event_creation(event, **kwargs):
+    message = "The event \"%s\" was created." % event.title
     log_entry(message)
 
 
-@mission_created.connect
-def log_mission_creation(mission, **kwargs):
-    message = "The mission \"%s\" was created." % mission.title
+@castmember_created.connect
+def log_castmember_creation(castmember, **kwargs):
+    message = "The character \"%s\" was created." % castmember.name
+    log_entry(message)
+
+@storyline_created.connect
+def log_storyline_creation(storyline, **kwargs):
+    message = "The storyline \"%s\" was created." % storyline.title
     log_entry(message)
 
 

@@ -1,44 +1,45 @@
 from flasktasks import db
-from flasktasks.models import Tag, Mission, Task, Color
+from flasktasks.models import Tag, Storyline, Event, Color, CastmemberColor, Castmember
 
 
 def create_tags():
-    tag1 = Tag("Work", Color.BLUE)
-    tag2 = Tag("College", Color.RED)
-    tag3 = Tag("Side Project", Color.GREEN)
+    tag1 = Tag("Work", Color.GREY)
     
     db.session.add(tag1)
-    db.session.add(tag2)
-    db.session.add(tag3)
     db.session.commit()
 
-def create_missions():
-    mission1 = Mission("Finish Stuff", 'Just finish some stuff', 1)
-    mission2 = Mission("Whatever Class", 'Accomplish that impossible goal', 2)
-    mission3 = Mission("Second Release", 'Pretend to be productive', 3)
+def create_storylines():
+    storyline1 = Storyline("Unnamed storyline", 'Misc.', 1)
 
-    db.session.add(mission1)
-    db.session.add(mission2)
-    db.session.add(mission3)
+    db.session.add(storyline1)
     db.session.commit()
 
-def create_tasks():
-    for i in range(1, 4):
-        task1 = Task("First Task", "Some useful description", i)
-        task2 = Task("Second Task", "Some useful description", i)
-        task3 = Task("Third Task", "Some useful description", i)
+def create_events():
+    stories=Storyline.query.all()
+    chars=Castmember.query.all()
+    for i in range(len(stories)):
+        event1 = Event("First Event", "Some useful description", stories[i].id,chars[0].id)
 
-        db.session.add(task1)
-        db.session.add(task2)
-        db.session.add(task3)
+        db.session.add(event1)
     db.session.commit()
+
+def create_castmembers():
+    castmember0 = Castmember("Unnamed","U")
+    db.session.add(castmember0)
+    db.session.commit()
+
+
 
 def run_seed():
+
+    print("Creating character...")
+    create_castmembers()
+
     print("Creating Tags...")
     create_tags()
 
-    print("Creating Missions...")
-    create_missions()
+    print("Creating storylines...")
+    create_storylines()
 
-    print("Creating Tasks...")
-    create_tasks()
+    print("Creating events...")
+    create_events()

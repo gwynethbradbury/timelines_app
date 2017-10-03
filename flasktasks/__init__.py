@@ -1,9 +1,20 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
+import dbconfig
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flasktasks.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}@{}/timelines'\
+    .format(dbconfig.db_user,
+            dbconfig.db_hostname)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}/timelines'\
+#     .format(dbconfig.db_user,
+#             dbconfig.db_password,
+#             dbconfig.db_hostname)
+
+
+app.secret_key = 'super secret key'
+app.config['SESSION_TYPE'] = 'filesystem'
+
 db = SQLAlchemy(app)
 
 

@@ -14,7 +14,7 @@
     margin-left: 5px;
 }
 
-.task-control .btn .glyphicon {
+.event-control .btn .glyphicon {
     margin-right: 5px;
 }
 
@@ -66,6 +66,80 @@
     color: #BB2024;
 }
 
-.mission-item-additional-content {
+
+
+.tag-orange {
+    border-left-color: #ff7518;
+}
+
+.tag-orange h4 {
+    color: #ff7518;
+}
+
+.bg-orange {
+    background-color: #ffbb90;
+}
+
+.tag-yellow {
+    border-left-color: #FFC65D;
+}
+
+.tag-yellow h4 {
+    color: #FFC65D;
+}
+
+.bg-yellow {
+    background-color: #ffe7b2;
+}
+
+.tag-green {
+    border-left-color: #7BC8A4;
+}
+
+.tag-green h4 {
+    color: #7BC8A4;
+}
+
+.bg-green {
+    background-color: #9ac8b5;
+}
+
+.tag-blue {
+    border-left-color: #4CC3D9;
+}
+
+.tag-blue h4 {
+    color: #4CC3D9;
+}
+
+.bg-blue {
+    background-color: #a8cfd9;
+}
+
+.tag-purple {
+    border-left-color: #93648D;
+}
+
+.tag-purple h4 {
+    color: #93648D;
+}
+
+.bg-purple {
+    background-color: #938492;
+}
+
+.tag-darkgrey {
+    border-left-color: #8c8c8c;
+}
+
+.tag-darkgrey h4 {
+    color: #8c8c8c;
+}
+
+.bg-darkgrey {
+    background-color: #b5b5b5;
+}
+
+.storyline-item-additional-content {
     margin-top: 10px;
 }

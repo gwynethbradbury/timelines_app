@@ -15,25 +15,38 @@ class Color(Enum):
     YELLOW = 4
     RED = 5
 
-class Task(db.Model):
+class CastmemberColor(Enum):
+    GREY=1
+    ORANGE=6
+    YELLOW=7
+    GREEN=8
+    BLUE=9
+    PURPLE=10
+    DARKGREY=11
+
+class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(70))
-    description = db.Column(db.String(140))
+    description = db.Column(db.Text)
     status = db.Column(db.Integer)
-    mission_id = db.Column(db.Integer, db.ForeignKey('mission.id'))
+    storyline_id = db.Column(db.Integer, db.ForeignKey('storyline.id'))
+    castmember_id = db.Column(db.Integer, db.ForeignKey('castmember.id'))
+    event_occurs_percent = db.Column(db.Float)
 
-    def __init__(self, title, description, mission_id):
+    def __init__(self, title, description, storyline_id, castmember_id, event_occurs_percent=0):
         self.title = title
         self.description = description
         self.status = Status.TO_DO.value
-        self.mission_id = mission_id
+        self.storyline_id = storyline_id
+        self.castmember_id = castmember_id
+        self.event_occurs_percent = event_occurs_percent
 
-class Mission(db.Model):
+class Storyline(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(70), unique=True)
     description = db.Column(db.String(210))
     tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
-    tasks = db.relationship('Task', backref='mission', lazy='dynamic')
+    events = db.relationship('Event', backref='storyline', lazy='dynamic')
 
     def __init__(self, title, description, tag_id):
         self.title = title
@@ -44,7 +57,7 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), unique=True)
     color = db.Column(db.Integer)
-    missions = db.relationship('Mission', backref='tag', lazy='dynamic')
+    storylines = db.relationship('Storyline', backref='tag', lazy='dynamic')
 
     def __init__(self, name, color=Color.GREY):
         self.name = name
@@ -53,6 +66,36 @@ class Tag(db.Model):
     def style(self):
         color = Color(self.color)
         return "tagged tag-%s" % color.name.lower()
+
+class Castmember(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), unique=True)
+    initials = db.Column(db.String(3), unique=True)
+    color = db.Column(db.Integer)
+    events = db.relationship('Event', backref='castmember', lazy='dynamic')
+
+    def __init__(self, name="Unassigned", initials="U", color=Color.GREY):
+        self.name = name
+        self.color = color.value
+        self.initials = initials
+
+    def style(self):
+        color = CastmemberColor(self.color)
+        return "tagged tag-%s" % color.name.lower()
+
+    def bgcol(self):
+        color = CastmemberColor(self.color)
+        return "bg-%s" % color.name.lower()
+
+# class EventChar(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     character_id = db.Column(db.Integer, db.ForeignKey('character.id'))
+#     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+#
+#     def __init(self,character_id,event_id):
+#         self.character_id = character_id
+#         self.event_id = event_id
+
 
 
 class LogEntry(db.Model):

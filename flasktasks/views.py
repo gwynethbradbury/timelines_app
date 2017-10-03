@@ -1,93 +1,212 @@
-from flask import render_template, request, redirect, url_for, abort, jsonify
+from flask import render_template, request, redirect, url_for, abort, jsonify, flash
 from collections import defaultdict
 from flasktasks import app, db
-from flasktasks.models import Mission, Task, Status, Tag, Color, LogEntry
-from flasktasks.signals import task_created, mission_created 
+from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry
+from flasktasks.signals import event_created, storyline_created, castmember_created
 
 
 @app.route('/')
 def index():
     return render_template('home.html')
 
-@app.route('/missions')
-def missions():
-    missions = Mission.query.all()
-    return render_template('mission/index.html', missions=missions)
+@app.route('/storylines')
+def storylines():
+    storylines = Storyline.query.all()
+    return render_template('storyline/index.html', storylines=storylines)
 
-@app.route('/missions/new', methods=['POST', 'GET'])
-def new_mission():
+@app.route('/storylines/new', methods=['POST', 'GET'])
+def new_storyline():
     if request.method == 'POST':
-        mission = Mission(request.form.get('title'),
+        storyline = Storyline(request.form.get('title'),
                           request.form.get('description'),
                           request.form.get('tag_id'))
-        db.session.add(mission)
+        db.session.add(storyline)
         db.session.commit()
-        mission_created.send(mission)
-        return redirect(url_for('missions'))
+        storyline_created.send(storyline)
+        return redirect(url_for('storylines'))
     else:
         tags = Tag.query.all()
-        return render_template('mission/new.html', tags=tags)
+        return render_template('storyline/new.html', tags=tags)
 
-@app.route('/tasks')
-def tasks():
-    mission = None
-    if request.args.get('mission_id'):
-        mission = Mission.query.get_or_404(request.args.get('mission_id'))
-        tasks = Task.query.filter_by(mission_id=mission.id).all()
+@app.route('/events')
+def events():
+    storyline = None
+    castmember = None
+    if request.args.get('storyline_id'):
+        storyline = Storyline.query.get_or_404(request.args.get('storyline_id'))
+        events = Event.query.filter_by(storyline_id=storyline.id).order_by(Event.event_occurs_percent.asc()).all()
+    elif request.args.get('castmember_id'):
+        castmember = Castmember.query.get_or_404(request.args.get('castmember_id'))
+        events = Event.query.filter_by(castmember_id=castmember.id).order_by(Event.event_occurs_percent.asc()).all()
     else:
-        tasks = Task.query.all()
+        events = Event.query.order_by(Event.event_occurs_percent.asc()).all()
 
-    tasks_by_status = defaultdict(list)
-    for task in tasks:
-        status = Status(task.status).name 
-        tasks_by_status[status].append(task)
-    return render_template('task/index.html', tasks=tasks_by_status,
-                           mission=mission)
+    events_by_status = defaultdict(list)
+    for event in events:
+        status = Status(event.status).name
+        events_by_status[status].append(event)
+    return render_template('event/index.html', events=events_by_status, events_by_time=events,
+                           storyline=storyline,castmember=castmember)
 
-@app.route('/tasks/new', methods=['POST', 'GET'])
-def new_task():
+@app.route('/castmembers')
+def castmembers():
+    # storyline = None
+    # if request.args.get('storyline_id'):
+    #     storyline = Storyline.query.get_or_404(request.args.get('storyline_id'))
+    #     tasks = Task.query.filter_by(storyline_id=storyline.id).all()
+    # else:
+    #     tasks = Task.query.all()
+    #
+    # tasks_by_status = defaultdict(list)
+    # for task in tasks:
+    #     status = Status(task.status).name
+    #     tasks_by_status[status].append(task)
+    castmembers = Castmember.query.all()
+    # events=Event.query.all()
+
+
+    storyline = None
+    castmember = None
+    if request.args.get('storyline_id'):
+        storyline = Storyline.query.get_or_404(request.args.get('storyline_id'))
+        events = Event.query.filter_by(storyline_id=storyline.id).all()
+    elif request.args.get('castmember_id'):
+        castmember = Castmember.query.get_or_404(request.args.get('castmember_id'))
+        events = Event.query.filter_by(castmember_id=castmember.id).all()
+    else:
+        events = Event.query.all()
+
+    events_by_castmember = defaultdict(list)
+    for event in events:
+        castmember = event.castmember.id
+        events_by_castmember[str(castmember)].append(event)
+    return render_template('castmember/index.html', castmembers=castmembers, events=events_by_castmember)
+
+@app.route('/castmembers/new', methods=['POST', 'GET'])
+def new_castmember():
+
+    # id = db.Column(db.Integer, primary_key=True)
+    # name = db.Column(db.String(30), unique=True)
+    # initials = db.Column(db.String(3), unique=True)
+    # color = db.Column(db.Integer)
+    # events = db.relationship('Event', backref='castmember', lazy='dynamic')
     if request.method == 'POST':
-        task = Task(request.form.get('title'),
-                    request.form.get('description'),
-                    request.form.get('mission_id'))
-        db.session.add(task)
+        color = CastmemberColor(int(request.form.get('color_id')))
+
+        castmember = Castmember(request.form.get('name'),
+                              request.form.get('initials'),
+                                color)
+        db.session.add(castmember)
         db.session.commit()
-        task_created.send(task)
-        return redirect(url_for('tasks'))
+        castmember_created.send(castmember)
+        return redirect('/castmembers')
+        # return redirect('/castmembers?castmember_id={}'.format(request.form.get('castmember_id')))
     else:
-        missions = Mission.query.all()
-        return render_template('task/new.html', missions=missions)
+        storylines = Storyline.query.all()
+        castmembers = Castmember.query.all()
+        colors = { color.name: color.value for color in CastmemberColor }
+        return render_template('castmember/new.html', storylines=storylines, castmembers = castmembers, colors=colors)
 
-@app.route('/tasks/<int:task_id>')
-def task(task_id):
-    task = Task.query.get_or_404(task_id)
-    return render_template('task/task.html', task=task)
+@app.route('/events/new', methods=['POST', 'GET'])
+def new_event():
+    if request.method == 'POST':
+        if request.form.get('occurs_percent'):
+            occurs_percent=request.form.get('occurs_percent')
+        else:
+            occurs_percent=0
+        event = Event(request.form.get('title'),
+                    request.form.get('description'),
+                    request.form.get('storyline_id'),
+                    request.form.get('castmember_id'),
+                      occurs_percent)
+        db.session.add(event)
+        db.session.commit()
+        event_created.send(event)
+        return redirect('/events?storyline_id={}'.format(request.form.get('storyline_id')))
+    else:
+        storylines = Storyline.query.all()
+        castmembers = Castmember.query.all()
+        return render_template('event/new.html', storylines=storylines, castmembers = castmembers)
 
-@app.route('/tasks/<int:task_id>/set_status/<status>')
-def set_status(task_id, status):
-    task = Task.query.get_or_404(task_id)
+@app.route('/events/<int:event_id>', methods=['POST', 'GET'])
+def event(event_id):
+    event = Event.query.get_or_404(event_id)
+    castmembers = Castmember.query.all()
+    storylines = Storyline.query.all()
+
+
+    if request.method == 'POST':
+        try:
+            event.description = request.form.get('description')
+            event.storyline_id = request.form.get('storyline_id')
+            event.event_occurs_percent = request.form.get('occurs_percent')
+        except KeyError:
+            abort(400)
+
+        db.session.add(event)
+        db.session.commit()
+        flash("Saved",category='message')
+
+    return render_template('event/event.html', event=event, castmembers=castmembers, storylines=storylines)
+
+@app.route('/events/<int:event_id>/set_status/<status>')
+def set_status(event_id, status):
+    event = Event.query.get_or_404(event_id)
     try:
-        task.status = Status[status.upper()].value
+        event.status = Status[status.upper()].value
     except KeyError:
         abort(400)
 
-    db.session.add(task)
+    db.session.add(event)
     db.session.commit()
-    return redirect(url_for('tasks'))
+    return redirect(url_for('events'))
 
-@app.route('/tasks/<int:task_id>', methods=['DELETE'])
-def delete_task(task_id):
-    task = Task.query.get_or_404(task_id)
-    db.session.delete(task)
+# region SET OWNER
+
+
+@app.route('/events/<int:event_id>/set_castmember/<status>')
+def set_castmember(event_id, status):
+    event = Event.query.get_or_404(event_id)
+    try:
+        castmember = Castmember.query.filter_by(initials=status).all()
+        if len(castmember)==0: abort(404)
+        event.castmember_id = castmember[0].id
+    except KeyError:
+        abort(400)
+
+    db.session.add(event)
     db.session.commit()
-    return url_for('tasks')
+    return redirect('/events/{}'.format(event_id))
+
+# endregion
+
+@app.route('/events/<int:event_id>', methods=['DELETE'])
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    db.session.delete(event)
+    db.session.commit()
+    return url_for('event')
+
+@app.route('/events/<int:event_id>')
+def unassign_castmember(event_id):
+    event = Event.query.get_or_404(event_id)
+    try:
+        castmember = Event.query.filter_by(initials="U").all()
+        if len(castmember)==0: abort(404)
+        event.castmember_id = castmember[0].id
+    except KeyError:
+        abort(400)
+
+    db.session.add(event)
+    db.session.commit()
+    return redirect('/events/{}'.format(event_id))
     
-@app.route('/missions/<int:mission_id>', methods=['DELETE'])
-def delete_mission(mission_id):
-    mission = Mission.query.get_or_404(mission_id)
-    db.session.delete(mission)
+@app.route('/storylines/<int:storyline_id>', methods=['DELETE'])
+def delete_storyline(storyline_id):
+    storyline = Storyline.query.get_or_404(storyline_id)
+    db.session.delete(storyline)
     db.session.commit()
-    return url_for('missions')
+    return url_for('storylines')
 
 @app.route('/tags/new', methods=['POST', 'GET'])
 def new_tag():
@@ -99,7 +218,7 @@ def new_tag():
         tag = Tag(request.form.get('name'), color)
         db.session.add(tag)
         db.session.commit()
-        return redirect(url_for('missions'))
+        return redirect(url_for('storylines'))
     else:
         colors = { color.name: color.value for color in Color }
         return render_template('tags/new.html', colors=colors)

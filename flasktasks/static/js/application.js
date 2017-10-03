@@ -1,9 +1,9 @@
-$("#delete-task").click(function() {
+$("#delete-event").click(function() {
     http_delete($(this));
     return false;
 });
 
-$("#delete-mission").click(function() {
+$("#delete-storyline").click(function() {
     http_delete($(this));
     return false;
 });

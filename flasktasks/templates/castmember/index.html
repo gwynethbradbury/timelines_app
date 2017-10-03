@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container">
+    <div class="page-header">
+        <h1>Characters</h1>
+    </div>
+
+    <div class="btn-group event-control" role="group">
+        <a href="{{ url_for('new_castmember') }}" class="btn btn-link new-storyline"><span class="glyphicon glyphicon-plus"></span><span>New character</span></a>
+    </div>
+    <div class="list-group">
+        {% for castmember in castmembers %}
+            <a href="{{ url_for("events", castmember_id=castmember.id) }}" class="list-group-item {{ castmember.style() }} ">
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h4 class="list-group-item-header">{{ castmember.name }}</h4>
+                        <p class="list-group-item-text">{{ castmember.initials }}</p>
+                        <div class="castmember-item-additional-content">
+                            {{ castmember | html_dispatch("castmember_list_item_additional_content") }}
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <span class="badge badge-big badge-blue">{{ castmember.events.count() }}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{#{% endblock %}#}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{#{% extends "base.html" %}#}
+{#{% block body %}#}
+<div class="container">
+    <div class="page-header">
+        <h1>Character Lines<small class="pull-right">
+            {% if storyline %}Storyline: {{ storyline.title }}
+            {% elif castmember %}Character: {{ castmember.name }}
+            {% else %}All Events
+            {% endif %}
+        </small></h1>
+    </div>
+
+{#    {% if storyline %}#}
+{#        <div class="well well-lg">#}
+{#            <h4>{{ storyline.title }}, <small>{{ storyline.description }}</small></h4>#}
+{#            <div class="btn-group event-control" role="group">#}
+{#                <a href="{{ url_for('new_event', storyline_id=storyline.id) }}" class="btn btn-link new-item"><span class="glyphicon glyphicon-plus"></span>New Event</a>#}
+{#                <a href="{{ url_for('delete_storyline', storyline_id=storyline.id) }}" id="delete-storyline" class="btn btn-link"><span class="glyphicon glyphicon-trash"></span>Remove</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    {% elif character %}#}
+{#        <div class="well well-lg">#}
+{#            <h4>{{ character.name }}</h4>#}
+{#            <div class="btn-group event-control" role="group">#}
+{#                <a href="{{ url_for('new_event', character_id=character.id) }}" class="btn btn-link new-item"><span class="glyphicon glyphicon-plus"></span>New Event</a>#}
+{#                <a href="{{ url_for('delete_storyline', storyline_id=storyline.id) }}" id="delete-storyline" class="btn btn-link"><span class="glyphicon glyphicon-trash"></span>Remove</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    {% else %}#}
+{#        <a href="{{ url_for('new_event') }}" class="btn btn-link new-item">#}
+{#            <span class="glyphicon glyphicon-plus"></span>New Event#}
+{#        </a>#}
+{#    {% endif %}#}
+
+    <div class="row kanban" style="overflow: scroll">
+        <table style="vertical-align: top;">
+            <tr>
+                {% for c in castmembers %}
+                    <td style="vertical-align: top; padding-right: 15px">
+                        {% with title=c.name, castmember=c, status=(c.id|string), icon="leaf" %}
+                            {% include "castmember/kanban_timeline.html" %}
+                        {% endwith %}
+                    </td>
+                    <td style="width: 15px;"></td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+
+
+{#        <table style="overflow: scroll">#}
+{#            <thead>#}
+{#                {% for c in castmembers %}#}
+{#                <td style="min-width: 100px">{{ c.name }}</td>#}
+{#                {% endfor %}#}
+{#            </thead>#}
+{#            <tr>#}
+{#                {% for c in characters %}#}
+{#    <td>#}
+{#<div class="card">#}
+{#  <ul class="timeline">#}
+{##}
+{#    <li class="timeline__item">#}
+{#      <div class="timeline__step">#}
+{#        <div class="timeline__step__marker timeline__step__marker--red"></div>#}
+{#      </div>#}
+{#      <div class="timeline__time">#}
+{#        5pm#}
+{#      </div>#}
+{#      <div class="timeline__content">#}
+{#        <div class="timeline__title">#}
+{#          New Icons#}
+{#        </div>#}
+{#        <ul class="timeline__points">#}
+{#          <li>Mobile App</li>#}
+{#        </ul>#}
+{#      </div>#}
+{#    </li>#}
+{##}
+{#    <li class="timeline__item">#}
+{#      <div class="timeline__step">#}
+{#        <div class="timeline__step__marker timeline__step__marker--blue"></div>#}
+{#      </div>#}
+{#      <div class="timeline__time">#}
+{#        4pm#}
+{#      </div>#}
+{#      <div class="timeline__content">#}
+{#        <div class="timeline__title">#}
+{#          Design Stand Up#}
+{#        </div>#}
+{#        <ul class="timeline__points">#}
+{#          <li>Hangouts</li>#}
+{#        </ul>#}
+{#      </div>#}
+{#    </li>#}
+{##}
+{#    <li class="timeline__item">#}
+{#      <div class="timeline__step">#}
+{#        <div class="timeline__step__marker timeline__step__marker--salmon"></div>#}
+{#      </div>#}
+{#      <div class="timeline__time">#}
+{#        9am#}
+{#      </div>#}
+{#      <div class="timeline__content">#}
+{#        <div class="timeline__title">#}
+{#          Break#}
+{#        </div>#}
+{#      </div>#}
+{#    </li>#}
+{##}
+{#    <li class="timeline__item">#}
+{#      <div class="timeline__step">#}
+{#        <div class="timeline__step__marker timeline__step__marker--blue"></div>#}
+{#      </div>#}
+{#      <div class="timeline__time">#}
+{#        2pm#}
+{#      </div>#}
+{#      <div class="timeline__content">#}
+{#        <div class="timeline__title">#}
+{#          Home Screen#}
+{#        </div>#}
+{#        <ul class="timeline__points">#}
+{#          <li>Web App</li>#}
+{#        </ul>#}
+{#      </div>#}
+{#    </li>#}
+{##}
+{#  </ul>#}
+{#</div>#}
+
+{#    </td>#}
+{#    {% endfor %}#}
+{% endblock %}
