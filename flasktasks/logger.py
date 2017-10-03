@@ -5,18 +5,18 @@ from flasktasks.signals import event_created, storyline_created, castmember_crea
 
 @event_created.connect
 def log_event_creation(event, **kwargs):
-    message = "The event \"%s\" was created." % event.title
+    message = "The event {} was created by u:{}." .format(event.title,event.user_id)
     log_entry(message)
 
 
 @castmember_created.connect
 def log_castmember_creation(castmember, **kwargs):
-    message = "The character \"%s\" was created." % castmember.name
+    message = "The character {} was created by u:{}." .format(castmember.name, castmember.user_id)
     log_entry(message)
 
 @storyline_created.connect
 def log_storyline_creation(storyline, **kwargs):
-    message = "The storyline \"%s\" was created." % storyline.title
+    message = "The storyline {} was created by u:{}." .format( storyline.title,storyline.user_id)
     log_entry(message)
 
 

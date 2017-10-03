@@ -10,7 +10,6 @@
         <script src="{{ url_for('static', filename='js/timeline.js') }}" defer></script>
         <title>Events</title>
 
-{#        #F16745 #FFC65D #7BC8A4 #4CC3D9 #93648D #404040#}
 
         <style >
             .color-0{color:#983d00;}
@@ -62,7 +61,7 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="{{ url_for('index') }}">Events</a>
+                    <a class="navbar-brand" href="{{ url_for('index') }}">{{ current_user.username }}</a>
                 </div>
                 <ul class="nav navbar-nav">
                     <li class="{{ url_for('index') | is_current_page }}">

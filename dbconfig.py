@@ -16,11 +16,10 @@ mail_password = 'autodidacticism169'
 mail_sender = 'gwyneth.bradbury@gmail.com'
 
 
-dbas_route = ""
-iaas_route = "http://0.0.0.0:3000"
-waas_route = "http://0.0.0.0:5000"
 
 
 db_name = "iaas"
+
+debug=True
 
 trigger_reload=False
