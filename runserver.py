@@ -1,4 +1,4 @@
 from flasktasks import app
 
-
-app.run(debug=False,port=5400)
+if __name__ == '__main__':
+    app.run(debug=False,port=5400)
