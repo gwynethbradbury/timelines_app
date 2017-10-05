@@ -61,9 +61,14 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
+                    {% if not current_user.is_authenticated %}
+                    <a class="navbar-brand" href="{{ url_for('signup') }}">Log in / Register</a>
+                    {% else %}
                     <a class="navbar-brand" href="{{ url_for('index') }}">{{ current_user.username }}</a>
+                    {% endif %}
                 </div>
                 <ul class="nav navbar-nav">
+                    {% if current_user.is_authenticated %}
                     <li class="{{ url_for('index') | is_current_page }}">
                         <a href="{{ url_for('index') }}">Home</a>
                     </li>
@@ -76,6 +81,7 @@
                     <li class="{{ url_for('castmembers') | is_current_page }}">
                         <a href="{{ url_for('castmembers') }}">Cast</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

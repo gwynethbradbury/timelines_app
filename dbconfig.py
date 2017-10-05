@@ -2,8 +2,9 @@ db_engine='mysql+pymysql'
 db_hostname = "localhost"
 db_user="root"
 db_password="GTG24DDa"
+db_port=3306
 test=False
-debug=True
+debug=False
 
 is_server_version = False
 mail_secret_key = 'development key'
@@ -18,8 +19,7 @@ mail_sender = 'gwyneth.bradbury@gmail.com'
 
 
 
-db_name = "iaas"
+db_name = "timelines"
 
-debug=True
 
 trigger_reload=False

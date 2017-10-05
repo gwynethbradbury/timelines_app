@@ -3,7 +3,15 @@ from flasktasks import bcrypt
 
 from enum import Enum
 from time import strftime
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.hybrid import hybrid_property
 
+import datetime
+
+# class Event():
+#     pass
+# class Castmember():
+#     pass
 
 class Status(Enum):
     TO_DO = 1
@@ -26,15 +34,31 @@ class CastmemberColor(Enum):
     PURPLE=10
     DARKGREY=11
 
+
+class EventChar(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    castmember_id = db.Column(db.Integer, db.ForeignKey('castmember.id'))
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+
+    def __init__(self,castmember_id,event_id):
+        self.castmember_id = castmember_id
+        self.event_id = event_id
+
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(70))
     description = db.Column(db.Text)
     status = db.Column(db.Integer)
     storyline_id = db.Column(db.Integer, db.ForeignKey('storyline.id'))
-    castmember_id = db.Column(db.Integer, db.ForeignKey('castmember.id'))
+    # castmember_id = db.Column(db.Integer, db.ForeignKey('castmember.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     event_occurs_percent = db.Column(db.Float)
+
+
+    cast = relationship("Castmember",
+                    secondary=EventChar.__table__,
+                    backref="events")
+
 
     def __init__(self, user_id, title, description, storyline_id, castmember_id, event_occurs_percent=0):
         self.title = title
@@ -44,6 +68,7 @@ class Event(db.Model):
         self.castmember_id = castmember_id
         self.event_occurs_percent = event_occurs_percent
         self.user_id = user_id
+
 
 class Storyline(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -82,7 +107,7 @@ class Castmember(db.Model):
     name = db.Column(db.String(30))
     initials = db.Column(db.String(3))
     color = db.Column(db.Integer)
-    events = db.relationship('Event', backref='castmember', lazy='dynamic')
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
@@ -92,6 +117,14 @@ class Castmember(db.Model):
         self.initials = initials
         self.user_id = user_id
 
+    def getEvents(self):
+        Events=[]
+        EventChars = EventChar.query.filter_by(castmember_id=self.id).all()
+        for e in EventChars:
+            Events.append(Event.query.filter_by(event_id=e.event_id).first())
+        return Events
+
+
     def style(self):
         color = CastmemberColor(self.color)
         return "tagged tag-%s" % color.name.lower()
@@ -100,14 +133,6 @@ class Castmember(db.Model):
         color = CastmemberColor(self.color)
         return "bg-%s" % color.name.lower()
 
-# class EventChar(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     character_id = db.Column(db.Integer, db.ForeignKey('character.id'))
-#     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
-#
-#     def __init(self,character_id,event_id):
-#         self.character_id = character_id
-#         self.event_id = event_id
 
 
 class LogEntry(db.Model):
@@ -123,9 +148,7 @@ class LogEntry(db.Model):
         self.user_id = 1
 
 
-from sqlalchemy.ext.hybrid import hybrid_property
 
-import datetime
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(64), unique=True)
@@ -134,7 +157,7 @@ class User(db.Model):
     registered_on = db.Column('registered_on', db.DateTime)
     active = db.Column('active', db.Boolean)
 
-    def __init__(self, username, password, email):
+    def __init__(self, username="default", password="password", email="default"):
         self.username = username
         self.password = password
         self.email = email

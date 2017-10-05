@@ -1,5 +1,5 @@
 from flasktasks import db
-from flasktasks.models import Tag, Storyline, Event, Color, CastmemberColor, Castmember, User
+from flasktasks.models import Tag, Storyline, Event, Color, CastmemberColor, Castmember, User, EventChar
 
 
 def create_tags(uid):
@@ -31,15 +31,23 @@ def create_castmembers(uid):
     db.session.commit()
 
 def create_user():
-    u = User('default','password','default')
+    u = User()
     db.session.add(u)
     db.session.commit()
     return u.id
 
+def link_event_char(uid):
+    c = Castmember.query.first()
+    e = Event.query.first()
+    ce = EventChar(c.id,e.id)
+    db.session.add(ce)
+    db.session.commit()
+
+
 
 
 def run_seed():
-    print("Creating defauly user")
+    print("Creating default user")
     uid = create_user()
     create_defaults(uid)
 
@@ -55,3 +63,8 @@ def create_defaults(uid):
 
     print("Creating events...")
     create_events(uid)
+
+    print("Adding char to event ...")
+    link_event_char(uid)
+
+    return

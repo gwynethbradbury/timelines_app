@@ -19,6 +19,7 @@ else:
                 dbconfig.db_name)
 
 
+
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 

@@ -4,7 +4,15 @@
 <form action="{{ url_for('signup') }}" method="POST">
     {{ form.username.label }}: {{ form.username }}<br>
     {{ form.password.label }}: {{ form.password }}<br>
+    {{ form.repeatpassword.label }}: {{ form.repeatpassword }}<br>
     {{ form.csrf_token }}
     <input type="submit" value="Sign Up" />
+</form>
+
+<form action="{{ url_for('signin') }}" method="POST">
+    {{ form.username.label }}: {{ form.username }}<br>
+    {{ form.password.label }}: {{ form.password }}<br>
+    {{ form.csrf_token }}
+    <input type="submit" value="Log In" />
 </form>
 {% endblock %}

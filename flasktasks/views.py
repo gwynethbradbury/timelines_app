@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, abort, jsonify, flash
 from collections import defaultdict
 from flasktasks import app, db
-from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry
+from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry, EventChar
 from flasktasks.signals import event_created, storyline_created, castmember_created
 
 from flask_login import current_user
@@ -41,7 +41,7 @@ def events():
         castmember = Castmember.query.get_or_404(request.args.get('castmember_id'))
         if not castmember.user_id==current_user.id:
             abort(404)
-        events = Event.query.filter_by(castmember_id=castmember.id,user_id=current_user.id).order_by(Event.event_occurs_percent.asc()).all()
+        events = castmember.events#Event.query.filter_by(castmember_id=castmember.id,user_id=current_user.id).order_by(Event.event_occurs_percent.asc()).all()
     else:
         events = Event.query.filter_by(user_id=current_user.id).order_by(Event.event_occurs_percent.asc()).all()
 
@@ -84,11 +84,12 @@ def castmembers():
     else:
         events = Event.query.filter_by(user_id=current_user.id).all()
 
-    events_by_castmember = defaultdict(list)
-    for event in events:
-        castmember = event.castmember.id
-        events_by_castmember[str(castmember)].append(event)
-    return render_template('castmember/index.html', castmembers=castmembers, events=events_by_castmember)
+    # events_by_castmember = defaultdict(list)
+    # for event in events:
+    #     castmember = event.castmember.id
+    #     events_by_castmember[str(castmember)].append(event)
+    events.sort(key=lambda x: x.event_occurs_percent)
+    return render_template('castmember/index.html', castmembers=castmembers, events=events)
 
 @app.route('/castmembers/new', methods=['POST', 'GET'])
 def new_castmember():
@@ -176,19 +177,23 @@ def set_status(event_id, status):
 # region SET OWNER
 
 
-@app.route('/events/<int:event_id>/set_castmember/<status>')
-def set_castmember(event_id, status):
+@app.route('/events/<int:event_id>/set_castmember/<cast_id>')
+def set_castmember(event_id, cast_id):
     event = Event.query.get_or_404(event_id)
     if not event.user_id == current_user.id:
         abort(404)
     try:
-        castmember = Castmember.query.filter_by(initials=status,user_id=current_user.id).all()
-        if len(castmember)==0: abort(404)
-        event.castmember_id = castmember[0].id
+        eventchars_count = EventChar.query.filter_by(castmember_id=cast_id, event_id=event_id).count()
+        if eventchars_count>0:
+            ECList = EventChar.query.filter_by(castmember_id=cast_id, event_id=event_id).all()
+            for e in ECList:
+                db.session.delete(e)
+        else:
+            EC = EventChar(castmember_id=cast_id,event_id=event_id)
+            db.session.add(EC)
     except KeyError:
         abort(400)
 
-    db.session.add(event)
     db.session.commit()
     return redirect('/events/{}'.format(event_id))
 

@@ -34,18 +34,20 @@
             <br/>
 
             <p class="lead">
-                <i>Character: <a href="{{ url_for("events", castmember_id=event.castmember.id) }}" class="color-{{ event.castmember.initials }}">{{ event.castmember.name }}</a></i>
+                <i>Character(s):
+                    {% for c in event.cast %}<a href="{{ url_for("events", castmember_id=c.id) }}" class="color-{{ c.initials }}">{{ c.name }}</a> {% endfor %}
+                </i>
             </p>
         </div>
         <div class="col-sm-3 event-control">
             <p>Assign event:</p>
             <div class="btn-group btn-group-justified" role="group">
                 {% for c in castmembers %}
-                    <a href="{{ url_for('set_castmember', event_id=event.id, status=c.initials) }}" class="btn btn-{{ loop.index0 % 6  }}">{{ c.initials }}</a>
+                    <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=c.id) }}" class="btn btn-{{ loop.index0 % 6  }}">{{ c.initials }}</a>
                 {% endfor %}
             </div>
             <div class="btn-group btn-group-justified" role="group">
-                <a href="{{ url_for('set_castmember', event_id=event.id, status='U') }}" class="btn btn-link">
+                <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=-1) }}" class="btn btn-link">
 {#                    <span class="glyphicon glyphicon-trash"></span>#}
                     Unassign</a>
             </div>
