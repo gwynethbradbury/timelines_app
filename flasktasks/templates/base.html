@@ -61,17 +61,25 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    {% if not current_user.is_authenticated %}
-                    <a class="navbar-brand" href="{{ url_for('signup') }}">Log in / Register</a>
-                    {% else %}
-                    <a class="navbar-brand" href="{{ url_for('index') }}">{{ current_user.username }}</a>
-                    {% endif %}
                 </div>
                 <ul class="nav navbar-nav">
-                    {% if current_user.is_authenticated %}
-                    <li class="{{ url_for('index') | is_current_page }}">
-                        <a href="{{ url_for('index') }}">Home</a>
+                    <a class="navbar-brand" href="{{ url_for('index') }}">Home</a>
+                    {% if not current_user.is_authenticated %}
+                        <a class="navbar-brand" href="{{ url_for('signup') }}">Log in / Register</a>
+                    {% else %}
+
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ current_user.username }}
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                            <li><a href="{{ url_for('settings') }}">Settings</a></li>
+                            <li><a href="{{ url_for('signout') }}">Log out</a></li>
+                        </ul>
                     </li>
+
                     <li class="{{ url_for('storylines') | is_current_page }}">
                         <a href="{{ url_for('storylines') }}">Storylines</a>
                     </li>

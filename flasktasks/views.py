@@ -359,6 +359,14 @@ def signout():
 
     return redirect(url_for('index'))
 
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
+
 @app.route('/reset', methods=["GET", "POST"])
 def reset():
     form = EmailForm()
