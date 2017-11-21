@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1df8019e-1a81-4682-82a3-f11227e13622" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/flasktasks/templates/chapter/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/flasktasks/templates/chapter/kanban_chapter.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/flasktasks/templates/chapter/kanban_timeline.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/flasktasks/templates/chapter/new.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbconfig.py" afterPath="$PROJECT_DIR$/dbconfig.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/logger.py" afterPath="$PROJECT_DIR$/flasktasks/logger.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/models.py" afterPath="$PROJECT_DIR$/flasktasks/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/signals.py" afterPath="$PROJECT_DIR$/flasktasks/signals.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/templates/base.html" afterPath="$PROJECT_DIR$/flasktasks/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/templates/event/event.html" afterPath="$PROJECT_DIR$/flasktasks/templates/event/event.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/templates/event/kanban_timeline.html" afterPath="$PROJECT_DIR$/flasktasks/templates/event/kanban_timeline.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/views.py" afterPath="$PROJECT_DIR$/flasktasks/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -58,7 +46,7 @@
         <entry file="file://$PROJECT_DIR$/flasktasks/templates/chapter/chapter.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-197">
-              <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+              <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -68,7 +56,7 @@
         <entry file="file://$PROJECT_DIR$/flasktasks/templates/chapter/index.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="177">
-              <caret line="38" column="56" lean-forward="true" selection-start-line="38" selection-start-column="56" selection-end-line="39" selection-end-column="63" />
+              <caret line="38" column="56" lean-forward="false" selection-start-line="38" selection-start-column="56" selection-end-line="39" selection-end-column="63" />
               <folding />
             </state>
           </provider>
@@ -88,7 +76,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="kanban_chapter.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="kanban_chapter.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/flasktasks/templates/chapter/kanban_chapter.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="165">
@@ -105,20 +93,19 @@
         <entry file="file://$PROJECT_DIR$/flasktasks/templates/chapter/new.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
-              <caret line="8" column="32" lean-forward="true" selection-start-line="8" selection-start-column="32" selection-end-line="9" selection-end-column="94" />
+              <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="32" selection-end-line="9" selection-end-column="94" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/flasktasks/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="60" column="22" lean-forward="false" selection-start-line="60" selection-start-column="22" selection-end-line="60" selection-end-column="22" />
+            <state relative-caret-position="348">
+              <caret line="62" column="30" lean-forward="false" selection-start-line="62" selection-start-column="30" selection-end-line="62" selection-end-column="30" />
               <folding>
-                <element signature="e#995#1301#0" expanded="false" />
-                <element signature="e#1330#2339#0" expanded="false" />
+                <element signature="e#1487#1793#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -189,11 +176,11 @@
         <option value="$PROJECT_DIR$/flasktasks/logger.py" />
         <option value="$PROJECT_DIR$/flasktasks/templates/event/event.html" />
         <option value="$PROJECT_DIR$/flasktasks/views.py" />
-        <option value="$PROJECT_DIR$/flasktasks/models.py" />
         <option value="$PROJECT_DIR$/flasktasks/templates/chapter/chapter.html" />
         <option value="$PROJECT_DIR$/flasktasks/templates/chapter/index.html" />
         <option value="$PROJECT_DIR$/flasktasks/templates/chapter/kanban_timeline.html" />
         <option value="$PROJECT_DIR$/flasktasks/templates/chapter/kanban_chapter.html" />
+        <option value="$PROJECT_DIR$/flasktasks/models.py" />
       </list>
     </option>
   </component>
@@ -279,50 +266,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="timelines_app_github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="timelines_app_github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flasktasks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="event" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="timelines_app_github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="timelines_app_github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flasktasks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chapter" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1065,26 +1008,15 @@
     <entry file="file://$PROJECT_DIR$/flasktasks/templates/chapter/new.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
-          <caret line="8" column="32" lean-forward="true" selection-start-line="8" selection-start-column="32" selection-end-line="9" selection-end-column="94" />
+          <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="32" selection-end-line="9" selection-end-column="94" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/flasktasks/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="60" column="22" lean-forward="false" selection-start-line="60" selection-start-column="22" selection-end-line="60" selection-end-column="22" />
-          <folding>
-            <element signature="e#995#1301#0" expanded="false" />
-            <element signature="e#1330#2339#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/flasktasks/templates/chapter/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="177">
-          <caret line="38" column="56" lean-forward="true" selection-start-line="38" selection-start-column="56" selection-end-line="39" selection-end-column="63" />
+          <caret line="38" column="56" lean-forward="false" selection-start-line="38" selection-start-column="56" selection-end-line="39" selection-end-column="63" />
           <folding />
         </state>
       </provider>
@@ -1092,7 +1024,7 @@
     <entry file="file://$PROJECT_DIR$/flasktasks/templates/chapter/chapter.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-197">
-          <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1136,6 +1068,16 @@
           <folding>
             <element signature="n#style#0;n#input#0;n#span#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#div#1;n#div#0;n#form#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#a#0;n#span#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#div#1;n#div#0;n#form#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/flasktasks/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="62" column="30" lean-forward="false" selection-start-line="62" selection-start-column="30" selection-end-line="62" selection-end-column="30" />
+          <folding>
+            <element signature="e#1487#1793#0" expanded="false" />
           </folding>
         </state>
       </provider>

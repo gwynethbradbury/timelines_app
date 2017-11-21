@@ -42,12 +42,25 @@ class Chapter(db.Model):
     synopsis = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     events = db.relationship('Event', backref='chapter', lazy='dynamic')
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=True)
+
 
     def __init__(self,title,synopsis,user_id):
         self.title=title
         self.synopsis=synopsis
         self.user_id = user_id
 
+class Book(db.model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    synopsis = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
+
+    def __init__(self,title,synopsis,user_id):
+        self.title=title
+        self.synopsis=synopsis
+        self.user_id = user_id
 
 class EventChar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
