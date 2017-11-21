@@ -188,7 +188,7 @@ span.bg {
   z-index: 1;
 }
 .timeline_line:before {
-  border-top: 2px solid #dfdfdf;
+  /*border-top: 2px solid #dfdfdf;*/
   content: "";
   margin: 0 auto;
   /* this centers the line to the full width specified */

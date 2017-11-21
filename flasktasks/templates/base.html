@@ -4,10 +4,32 @@
         <link rel=stylesheet href="{{ url_for('static',filename='css/bootstrap.css') }}">
         <link rel=stylesheet href="{{ url_for('static',filename='css/application.css') }}">
         <link rel=stylesheet href="{{ url_for('static',filename='css/timeline.css') }}">
-        <script src="{{ url_for('static', filename='js/jquery-2.2.4.js') }}" defer></script>
+        <!--<script src="{{ url_for('static', filename='js/jquery-2.2.4.js') }}" defer></script>-->
+        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+
+  <!--<script src="https://code.jquery.com/jquery-2.2.4.js"></script>-->
+  <!--<script src="https://code.jquery.com/ui/2.2.4/jquery-ui.js"></script>-->
+  <!--<script>-->
+  <!--$( function() {-->
+    <!--$( "#sortable" ).sortable();-->
+    <!--$( "#sortable" ).disableSelection();-->
+  <!--} );-->
+  <!--</script>-->
+
+        <!--<style>-->
+  <!--#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }-->
+  <!--#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }-->
+  <!--#sortable li span { position: absolute; margin-left: -1.3em; }-->
+  <!--</style>-->
+
+
         <script src="{{ url_for('static', filename='js/bootstrap.js') }}" defer></script>
         <script src="{{ url_for('static', filename='js/application.js') }}" defer></script>
-        <script src="{{ url_for('static', filename='js/timeline.js') }}" defer></script>
+        <!--<script src="{{ url_for('static', filename='js/timeline.js') }}" defer></script>-->
+
+        <!--<script src="{{ url_for('static', filename='js/list.js') }}" type="text/javascript" defer></script>-->
+
+        {% block additionalscripts %}{% endblock %}
         <title>Events</title>
 
 
@@ -54,7 +76,47 @@
         .btn-5[disabled].active,fieldset[disabled] .btn-5.active{background-color:#8c8c8c;border-color:#8c8c8c}
         .btn-5 .badge{color:#8c8c8c;background-color:#ffffff}
 
+        .slides {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 300px;
+        }
+        .slide {
+            padding: 15px;
+            background-color: #2F2F2F;
+            margin: 0 0 15px;
+            text-align: center;
+            color: #FFF;
+            border: 2px solid #444;
+        }
 
+        .slide-placeholder {
+            background: #DADADA;
+            position: relative;
+        }
+        .slide-placeholder:after {
+            content: " ";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background-color: #FFF;
+        }
+
+        .slide2 {
+            height: 30px;
+        }
+        .slide3 {
+            height: 50px;
+        }
+        .slide4 {
+            height: 90px;
+        }
+        .slide5 {
+            height: 35px;
+        }
         </style>
     </head>
     <body>
@@ -94,5 +156,7 @@
             </div>
         </nav>
         {% block body %}{% endblock %}
+
+
     </body>
 </html>
