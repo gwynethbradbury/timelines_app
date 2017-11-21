@@ -61,6 +61,14 @@
                         {% endfor %}
                     </select>
                 </div>
+                <div class="form-group">
+                    <select class="form-control" name="chapter_id">
+        {#                <option value="-1">Select a chapter</option>#}
+                        {% for chapter in chapters %}
+                            <option value="{{ chapter.id }}" {% if chapter.id==event.chapter_id %}selected="true"{% endif %} {{ chapter.id | is_selected }}>{{ chapter.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
                 <div class="form-group">
                     <!--<input name="occurs_percent" type="number" class="form-control" placeholder="When does this happen?" value="{{ event.event_occurs_percent }}">-->

@@ -4,7 +4,7 @@ db_user="root"
 db_password="GTG24DDa"
 db_port=3306
 test=False
-debug=True
+debug=False
 
 is_server_version = False
 mail_secret_key = 'development key'

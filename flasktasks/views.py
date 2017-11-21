@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, url_for, abort, jsonify, flash
 from collections import defaultdict
 from flasktasks import app, db
-from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry, EventChar
-from flasktasks.signals import event_created, storyline_created, castmember_created
+from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry, EventChar, Chapter
+from flasktasks.signals import event_created, storyline_created, castmember_created, chapter_created
 
 from flask_login import current_user
 @app.route('/')
@@ -28,8 +28,25 @@ def new_storyline():
         tags = Tag.query.filter_by(user_id=current_user.id).all()
         return render_template('storyline/new.html', tags=tags)
 
-@app.route('/events')
+@app.route('/chapters', methods=['POST', 'GET'])
+def chapters():
+    chapters = Chapter.query.all()
+    return render_template('chapter/index.html',chapters=chapters)
+
+@app.route('/events', methods=['POST', 'GET'])
 def events():
+
+    if request.method == 'POST':
+    #     import json
+    #
+    #     myJson = json.loads('sortables')
+    #
+    #     param3b1 = myJson['abo']['param3'][1]['param3b1']
+    #
+        names = request.form.getlist('handles[]')
+        pass
+
+
     storyline = None
     castmember = None
     if request.args.get('storyline_id'):
@@ -116,6 +133,23 @@ def new_castmember():
         colors = { color.name: color.value for color in CastmemberColor }
         return render_template('castmember/new.html', storylines=storylines, castmembers = castmembers, colors=colors)
 
+@app.route('/chapters/new', methods=['POST', 'GET'])
+def new_chapter():
+
+    if request.method == 'POST':
+        # if request.form.get('occurs_percent'):
+        #     occurs_percent=request.form.get('occurs_percent')
+        # else:
+        #     occurs_percent=0
+        chapter = Chapter(user_id=current_user.id, title=request.form.get('title'),
+                           synopsis=request.form.get('synopsis'))
+        db.session.add(chapter)
+        db.session.commit()
+        chapter_created.send(chapter)
+        return redirect('/chapters')
+    else:
+        return render_template('chapter/new.html')
+
 @app.route('/events/new', methods=['POST', 'GET'])
 def new_event():
     if request.method == 'POST':
@@ -137,6 +171,26 @@ def new_event():
         castmembers = Castmember.query.filter_by(user_id=current_user.id).all()
         return render_template('event/new.html', storylines=storylines, castmembers = castmembers)
 
+@app.route('/chapters/<int:chapter_id>', methods=['POST', 'GET'])
+def chapter(chapter_id):
+    chapter = Chapter.query.get_or_404(chapter_id)
+    if not chapter.user_id == current_user.id:
+        abort(404)
+
+    if request.method == 'POST':
+        try:
+            chapter.title = request.form.get('title')
+            chapter.synopsis = request.form.get('synopsis')
+        except KeyError:
+            abort(400)
+
+        db.session.add(chapter)
+        db.session.commit()
+        flash("Saved",category='message')
+
+    return render_template('chapter/chapter.html', chapter=chapter)
+
+
 @app.route('/events/<int:event_id>', methods=['POST', 'GET'])
 def event(event_id):
     event = Event.query.get_or_404(event_id)
@@ -144,12 +198,14 @@ def event(event_id):
         abort(404)
     castmembers = Castmember.query.filter_by(user_id=current_user.id).all()
     storylines = Storyline.query.filter_by(user_id=current_user.id).all()
+    chapters = Chapter.query.filter_by(user_id=current_user.id).all()
 
 
     if request.method == 'POST':
         try:
             event.description = request.form.get('description')
             event.storyline_id = request.form.get('storyline_id')
+            event.chapter_id = request.form.get('chapter_id')
             event.event_occurs_percent = request.form.get('occurs_percent')
         except KeyError:
             abort(400)
@@ -158,7 +214,7 @@ def event(event_id):
         db.session.commit()
         flash("Saved",category='message')
 
-    return render_template('event/event.html', event=event, castmembers=castmembers, storylines=storylines)
+    return render_template('event/event.html', event=event, castmembers=castmembers, storylines=storylines,chapters=chapters)
 
 @app.route('/events/<int:event_id>/set_status/<status>')
 def set_status(event_id, status):
