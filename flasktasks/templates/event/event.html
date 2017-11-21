@@ -1,4 +1,12 @@
 {% extends "base.html" %}
+
+{% block additionalscripts %}
+    <!-- wysihtml5 parser rules -->
+    <script src="{{ url_for('static',filename='wysihtml5/parser_rules/advanced.js') }}"></script>
+    <!-- Library -->
+    <script src="{{ url_for('static',filename='wysihtml5/dist/wysihtml5-0.3.0.min.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 <div class="container">
     <div class="page-header">
@@ -10,9 +18,39 @@
         <div class="col-sm-9">
 
 
+
+
+            <!--<form></form>-->
+
+
+
+
+
+
+
             <form method="POST">
+                <div id="wysihtml5-toolbar" style="display: none;">
+                    <a data-wysihtml5-command="bold" class="btn btn-info"><strong>B</strong></a>
+                    <a data-wysihtml5-command="italic" class="btn btn-info"><i>I</i></a>
+
+                    <!--&lt;!&ndash; Some wysihtml5 commands require extra parameters &ndash;&gt;-->
+                    <!--<a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red">red</a>-->
+                    <!--<a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green">green</a>-->
+                    <!--<a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue">blue</a>-->
+
+                    <!-- Some wysihtml5 commands like 'createLink' require extra paramaters specified by the user (eg. href) -->
+                    <!--<a data-wysihtml5-command="createLink" class="btn btn-info">html</a>-->
+                    <!--<div data-wysihtml5-dialog="createLink" style="display: none;">-->
+                        <!--<label>-->
+                            <!--Link:-->
+                            <!--<input data-wysihtml5-dialog-field="href" value="http://" class="text">-->
+                        <!--</label>-->
+                        <!--<a data-wysihtml5-dialog-action="save">OK</a> <a data-wysihtml5-dialog-action="cancel">Cancel</a>-->
+                    <!--</div>-->
+                </div>
                 <div class="form-group">
-                    <textarea name="description" class="form-control" rows="3" placeholder="Describe at will">{{ event.description }}</textarea>
+                    <!--<textarea name="description" class="form-control" rows="3" placeholder="Describe at will">{{ event.description }}</textarea>-->
+                    <textarea name="description" class="form-control" rows="3" placeholder="Describe at will" id="wysihtml5-textarea" autofocus>{{ event.description }}</textarea>
                 </div>
 
                 <div class="form-group">
@@ -25,11 +63,15 @@
                 </div>
 
                 <div class="form-group">
-                    <input name="occurs_percent" type="number" class="form-control" placeholder="When does this happen?" value="{{ event.event_occurs_percent }}">
+                    <!--<input name="occurs_percent" type="number" class="form-control" placeholder="When does this happen?" value="{{ event.event_occurs_percent }}">-->
+
+                    <input type="range" name="occurs_percent" min="0" max="100" value="{{ event.event_occurs_percent }}">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Save!</button>
             </form>
+
+
 
             <br/>
 
@@ -66,4 +108,13 @@
         </div>
     </div>
 </div>
+
+
+<script>
+var editor = new wysihtml5.Editor("wysihtml5-textarea", { // id of textarea element
+  toolbar:      "wysihtml5-toolbar", // id of toolbar element
+  parserRules:  wysihtml5ParserRules // defined in parser rules set
+});
+</script>
+
 {% endblock %}
