@@ -50,7 +50,7 @@ class Chapter(db.Model):
         self.synopsis=synopsis
         self.user_id = user_id
 
-class Book(db.model):
+class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     synopsis = db.Column(db.Text)
