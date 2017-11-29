@@ -23,17 +23,26 @@
         </div>
 
         <div class="form-group">
+            <select class="form-control" name="chapter_id">
+                <option value="-1">Select a chapter</option>
+                {% for chapter in chapters %}
+                    <option value="{{ chapter.id }}" {{ chapter.id | is_selected }}>{{ chapter.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
             <select class="form-control" name="castmember_id">
-                <option value="-1">Select a Character</option>
+                <option value="-1">Select a main character</option>
                 {% for castmember in castmembers %}
                     <option value="{{ castmember.id }}" {{ castmember.id | is_selected }}>{{ castmember.name }}</option>
                 {% endfor %}
             </select>
         </div>
 
-        <div class="form-group">
-            <input name="occurs_percent" type="number" class="form-control" placeholder="When does this happen?">
-        </div>
+        <!--<div class="form-group">-->
+            <!--<input name="occurs_percent" type="number" class="form-control" placeholder="When does this happen?">-->
+        <!--</div>-->
 
         <button type="submit" class="btn btn-primary">Create it!</button>
     </form>

@@ -51,6 +51,30 @@ def chapters():
     chapters = Chapter.query.all()
     return render_template('chapter/index.html',chapters=chapters)
 
+@app.route('/reorder_book_chapters/<book_id>', methods=['POST', 'GET'])
+def reorder_book_chapters(book_id):
+    if request.method == 'POST':
+    #     import json
+    #
+    #     myJson = json.loads('sortables')
+    #
+    #     param3b1 = myJson['abo']['param3'][1]['param3b1']
+    #
+
+        names = request.form.getlist('handles[]')
+        new_num=0
+        for n in names:
+            chapter = Chapter.query.get_or_404(int(n))
+
+            chapter.number = new_num
+            new_num=new_num+1
+
+            db.session.add(chapter)
+        db.session.commit()
+
+
+    return redirect('book/{}'.format(book_id))
+
 @app.route('/events', methods=['POST', 'GET'])
 def events():
 
@@ -193,11 +217,18 @@ def new_event():
         db.session.add(event)
         db.session.commit()
         event_created.send(event)
-        return redirect('/events?storyline_id={}'.format(request.form.get('storyline_id')))
+        if not request.form.get('chapter_id')=='-1':
+            return redirect('/chapters?chapter_id={}'.format(request.form.get('chapter_id')))
+        if not request.form.get('storyline_id')=='-1':
+            return redirect('/events?storyline_id={}'.format(request.form.get('storyline_id')))
+        if not request.form.get('castmember_id')=='-1':
+            return redirect('/events?castmember_id={}'.format(request.form.get('castmember_id')))
+        return redirect('/events')
     else:
         storylines = Storyline.query.filter_by(user_id=current_user.id).all()
         castmembers = Castmember.query.filter_by(user_id=current_user.id).all()
-        return render_template('event/new.html', storylines=storylines, castmembers = castmembers)
+        chapters = Chapter.query.filter_by(user_id=current_user.id).all()
+        return render_template('event/new.html', storylines=storylines, castmembers = castmembers, chapters=chapters)
 
 @app.route('/chapters/<int:chapter_id>', methods=['POST', 'GET'])
 def chapter(chapter_id):
@@ -354,6 +385,13 @@ def new_tag():
         return render_template('tags/new.html', colors=colors)
 
 
+@app.route('/reader/<book_id>')
+def reader(book_id):
+    book = Book.query.get_or_404(book_id)
+    if not book.user_id == current_user.id:
+        abort(404)
+    return render_template('book/reader.html', book=book)
+
 @app.route('/log')
 def log():
     log_entries = LogEntry.query.filter_by(user_id=current_user.id).all()
@@ -427,34 +465,47 @@ from database.seed import create_defaults
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     form = EmailPasswordForm()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.username.data, password=form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        login_user(user, force=True)
-        #todo: create default event etc
-        # create_defaults(user.id)
-        return redirect(url_for('index'))
+    form2 = UsernamePasswordForm()
 
-    return render_template('signup.html', form=form)
+    if request.method == 'POST':
+
+        if form.validate_on_submit():
+            user = User(username=form.username.data, email=form.username.data, password=form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, force=True)
+            #todo: create default event etc
+            # create_defaults(user.id)
+            return redirect(url_for('index'))
+
+    return render_template('signup.html', form=form, form2=form2)
 
 @app.route('/signin', methods=["GET", "POST"])
 def signin():
-    form = UsernamePasswordForm()
+    form = EmailPasswordForm()
+    form2 = UsernamePasswordForm()
 
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first_or_404()
-        if user is None:
-            flash('Username or Password is invalid', 'error')
-            return redirect(url_for('login'))
 
-        if user.is_correct_password(form.password.data):
-            login_user(user, force=True)
-            flash('Logged in successfully')
-            return redirect(url_for('index'))
-        else:
-            return redirect(url_for('signin'))
-    return render_template('signin.html', form=form)
+    if request.method == 'POST':
+        # pass
+        try:
+            if form2.validate_on_submit():
+                user = User.query.filter_by(username=form2.username.data).first_or_404()
+                if user is None:
+                    flash('Username or Password is invalid', 'error')
+                    return redirect(url_for('login'))
+
+                if user.is_correct_password(form2.password.data):
+                    login_user(user, force=True)
+                    flash('Logged in successfully')
+                    return redirect(url_for('index'))
+                else:
+                    return redirect(url_for('signup'))
+
+        except Exception as e:
+            pass
+
+    return render_template('signup.html', form=form, form2=form2)
 
 
 
@@ -466,7 +517,8 @@ def signout():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    books = Book.query.filter_by(user_id=current_user.id).all()
+    return render_template('profile.html', books=books)
 
 @app.route('/settings')
 def settings():
@@ -519,3 +571,4 @@ def reset_with_token(token):
         return redirect(url_for('signin'))
 
     return render_template('reset_with_token.html', form=form, token=token)
+
