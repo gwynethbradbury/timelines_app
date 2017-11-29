@@ -1,3 +1,5 @@
+
+<form action="{{ url_for('events') }}" class=".form-horizontal" method="POST">
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">{{ title }}<span class="glyphicon glyphicon-{{ icon }}"></span></h3>
@@ -7,13 +9,14 @@
             <table>
             <!--<tr class="timeline_line">-->
             <tr class="timeline_line" id="sortable-hor">
-            {% for event in events_by_time|sort(attribute='event_occurs_percent') %}
+                {% for event in events_by_time|sort(attribute='event_occurs_percent') %}
                 <!--<td style="padding-right: 15px; vertical-align: top; text-align: left">-->
                 <td style="padding-right: 15px; vertical-align: top; text-align: left; background: #fff; border-style:none"
-                    class="ui-state-default" id="{{ event.id }}">
+                    class="ui-state-default" >
                 <span>
+                <input type="text" style="visibility: collapse" id="{{ event.id }}" value="{{ event.id }}" name="handles[]"/>
                     <a href="{{ url_for('event', event_id=event.id) }}" class="list-group-item  {{ castmember.style() }}" style="width:300px;">
-                    <h5>Chapter: {{ event.event_occurs_percent|round(0,'floor')|int }}</h5>
+                        <h5>Chapter: {% if event.chapter %}{{event.chapter.title}}{% else %}<i>no chapter</i>{% endif %} </h5>
                     <h4 class="list-group-item-heading">{{ event.title }}</h4>
                     <p class="list-group-item-text">{{ event.description[:500] |safe}}{% if event.description|length>500 %}...{% endif %}</p>
                     <br/>
@@ -25,6 +28,9 @@
             {% endfor %}
             </tr>
             </table>
+
         </div>
     </div>
 </div>
+<button type="submit" class="btn btn-default">Save</button>
+</form>

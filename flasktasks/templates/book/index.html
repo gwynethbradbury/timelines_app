@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container">
+    <div class="page-header">
+        <h1>Books</h1>
+    </div>
+
+    <div class="btn-group event-control" role="group">
+        <a href="{{ url_for('new_book') }}" class="btn btn-link new-book"><span class="glyphicon glyphicon-plus"></span><span>New Book</span></a>
+    </div>
+    <div class="list-group">
+        {% for book in books %}
+            <a href="{{ url_for('book', book_id=book.id) }}" class="list-group-item {{ book.style() }}">
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h4 class="list-group-item-header">{{ book.title }}</h4>
+                        <p class="list-group-item-text">{{ book.synopsis }}</p>
+                        <div class="book-item-additional-content">
+                            {{ book | html_dispatch("book_list_item_additional_content") }}
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <span class="badge badge-big badge-blue">{{ book.chapters.count() }}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

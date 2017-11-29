@@ -36,6 +36,34 @@ class CastmemberColor(Enum):
     PURPLE=10
     DARKGREY=11
 
+class Chapter(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    synopsis = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    events = db.relationship('Event', backref='chapter', lazy='dynamic')
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=True)
+
+
+    def __init__(self,title,synopsis,user_id):
+        self.title=title
+        self.synopsis=synopsis
+        self.user_id = user_id
+
+class Book(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    synopsis = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
+
+    def __init__(self,title,synopsis,user_id):
+        self.title=title
+        self.synopsis=synopsis
+        self.user_id = user_id
+    def style(self):
+        color = Color.GREY
+        return "tagged tag-%s" % color.name.lower()
 
 class EventChar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,6 +80,7 @@ class Event(db.Model):
     description = db.Column(db.Text)
     status = db.Column(db.Integer)
     storyline_id = db.Column(db.Integer, db.ForeignKey('storyline.id'))
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=True)
     # castmember_id = db.Column(db.Integer, db.ForeignKey('castmember.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     event_occurs_percent = db.Column(db.Float)

@@ -1,11 +1,16 @@
 from flasktasks import app, db
 from flasktasks.models import LogEntry
-from flasktasks.signals import event_created, storyline_created, castmember_created
+from flasktasks.signals import event_created, storyline_created, castmember_created, chapter_created
 
 
 @event_created.connect
 def log_event_creation(event, **kwargs):
     message = "The event {} was created by u:{}." .format(event.title,event.user_id)
+    log_entry(message)
+
+@chapter_created.connect
+def log_chapter_creation(chapter, **kwargs):
+    message = "The chapter {} was created by u:{}." .format(chapter.title,chapter.user_id)
     log_entry(message)
 
 

@@ -151,6 +151,12 @@
                     <li class="{{ url_for('castmembers') | is_current_page }}">
                         <a href="{{ url_for('castmembers') }}">Cast</a>
                     </li>
+                    <li class="{{ url_for('chapters') | is_current_page }}">
+                        <a href="{{ url_for('chapters') }}">Chapters</a>
+                    </li>
+                    <li class="{{ url_for('books') | is_current_page }}">
+                        <a href="{{ url_for('books') }}">Books</a>
+                    </li>
                     {% endif %}
                 </ul>
             </div>

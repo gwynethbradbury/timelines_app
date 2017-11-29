@@ -58,6 +58,22 @@
             </div>
         </div>
 
+    {% elif book %}
+
+        <div class="well well-lg" >
+            <h4>{{ book.title }}, <small>{{ book.synopsis }}</h4>
+            <div class="btn-group event-control" role="group">
+                <a href="{{ url_for('new_event', book_id=book.id) }}" class="btn btn-link new-item"><span class="glyphicon glyphicon-plus"></span>New Event</a>
+<!--{#                <a href="{{ url_for('delete_book', book_id=book.id) }}" id="book-castmember" class="btn btn-link"><span class="glyphicon glyphicon-trash"></span>Remove</a>#}-->
+            </div>
+        </div>
+        <div class="row kanban">
+            <div class="col-lg-12">
+                {% with title="Timeline", icon="leaf" %}
+                    {% include "book/kanban_timeline.html" %}
+                {% endwith %}
+            </div>
+        </div>
     {% else %}
         <a href="{{ url_for('new_event') }}" class="btn btn-link new-item">
             <span class="glyphicon glyphicon-plus"></span>New Event

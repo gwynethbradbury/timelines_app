@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, url_for, abort, jsonify, flash
 from collections import defaultdict
 from flasktasks import app, db
-from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry, EventChar
-from flasktasks.signals import event_created, storyline_created, castmember_created
+from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry, EventChar, Chapter, Book
+from flasktasks.signals import event_created, storyline_created, castmember_created, chapter_created, book_created
 
 from flask_login import current_user
 @app.route('/')
@@ -13,6 +13,24 @@ def index():
 def storylines():
     storylines = Storyline.query.filter_by(user_id=current_user.id).all()
     return render_template('storyline/index.html', storylines=storylines)
+
+@app.route('/books')
+def books():
+    books = Book.query.filter_by(user_id=current_user.id).all()
+    return render_template('book/index.html', books=books)
+
+@app.route('/books/new', methods=['POST', 'GET'])
+def new_book():
+    if request.method == 'POST':
+        book = Book(user_id=current_user.id, title=request.form.get('title'),
+                              synopsis=request.form.get('synopsis'))
+        db.session.add(book)
+        db.session.commit()
+        book_created.send(book)
+        return redirect(url_for('books'))
+    else:
+        tags = Tag.query.filter_by(user_id=current_user.id).all()
+        return render_template('book/new.html', tags=tags)
 
 @app.route('/storylines/new', methods=['POST', 'GET'])
 def new_storyline():
@@ -28,10 +46,28 @@ def new_storyline():
         tags = Tag.query.filter_by(user_id=current_user.id).all()
         return render_template('storyline/new.html', tags=tags)
 
-@app.route('/events')
+@app.route('/chapters', methods=['POST', 'GET'])
+def chapters():
+    chapters = Chapter.query.all()
+    return render_template('chapter/index.html',chapters=chapters)
+
+@app.route('/events', methods=['POST', 'GET'])
 def events():
+
+    if request.method == 'POST':
+    #     import json
+    #
+    #     myJson = json.loads('sortables')
+    #
+    #     param3b1 = myJson['abo']['param3'][1]['param3b1']
+    #
+        names = request.form.getlist('handles[]')
+        pass
+
+
     storyline = None
     castmember = None
+    book=None
     if request.args.get('storyline_id'):
         storyline = Storyline.query.get_or_404(request.args.get('storyline_id'))
         if not storyline.user_id==current_user.id:
@@ -42,6 +78,15 @@ def events():
         if not castmember.user_id==current_user.id:
             abort(404)
         events = castmember.events#Event.query.filter_by(castmember_id=castmember.id,user_id=current_user.id).order_by(Event.event_occurs_percent.asc()).all()
+    elif request.args.get('book_id'):
+        book = Book.query.get_or_404(request.args.get('book_id'))
+        if not book.user_id==current_user.id:
+            abort(404)
+        chapters = Chapter.query.filter_by(book_id=book.id,user_id=current_user.id).order_by(Chapter.id.asc()).all()
+        events=[]
+        for c in chapters:
+            for e in c.events:
+                events.append(e)
     else:
         events = Event.query.filter_by(user_id=current_user.id).order_by(Event.event_occurs_percent.asc()).all()
 
@@ -50,7 +95,7 @@ def events():
         status = Status(event.status).name
         events_by_status[status].append(event)
     return render_template('event/index.html', events=events_by_status, events_by_time=events,
-                           storyline=storyline,castmember=castmember)
+                           storyline=storyline,castmember=castmember, book=book)
 
 @app.route('/castmembers')
 def castmembers():
@@ -116,6 +161,23 @@ def new_castmember():
         colors = { color.name: color.value for color in CastmemberColor }
         return render_template('castmember/new.html', storylines=storylines, castmembers = castmembers, colors=colors)
 
+@app.route('/chapters/new', methods=['POST', 'GET'])
+def new_chapter():
+    books = Book.query.filter_by(user_id=current_user.id).all()
+    if request.method == 'POST':
+        # if request.form.get('occurs_percent'):
+        #     occurs_percent=request.form.get('occurs_percent')
+        # else:
+        #     occurs_percent=0
+        chapter = Chapter(user_id=current_user.id, title=request.form.get('title'),
+                           synopsis=request.form.get('synopsis'))
+        db.session.add(chapter)
+        db.session.commit()
+        chapter_created.send(chapter)
+        return redirect('/chapters')
+    else:
+        return render_template('chapter/new.html', books=books)
+
 @app.route('/events/new', methods=['POST', 'GET'])
 def new_event():
     if request.method == 'POST':
@@ -137,6 +199,28 @@ def new_event():
         castmembers = Castmember.query.filter_by(user_id=current_user.id).all()
         return render_template('event/new.html', storylines=storylines, castmembers = castmembers)
 
+@app.route('/chapters/<int:chapter_id>', methods=['POST', 'GET'])
+def chapter(chapter_id):
+    chapter = Chapter.query.get_or_404(chapter_id)
+    if not chapter.user_id == current_user.id:
+        abort(404)
+
+    if request.method == 'POST':
+        try:
+            chapter.title = request.form.get('title')
+            chapter.synopsis = request.form.get('synopsis')
+            chapter.book_id = request.form.get('book_id')
+        except KeyError:
+            abort(400)
+
+        db.session.add(chapter)
+        db.session.commit()
+        flash("Saved",category='message')
+
+    books = Book.query.filter_by(user_id=current_user.id).all()
+    return render_template('chapter/chapter.html', chapter=chapter, books=books)
+
+
 @app.route('/events/<int:event_id>', methods=['POST', 'GET'])
 def event(event_id):
     event = Event.query.get_or_404(event_id)
@@ -144,12 +228,14 @@ def event(event_id):
         abort(404)
     castmembers = Castmember.query.filter_by(user_id=current_user.id).all()
     storylines = Storyline.query.filter_by(user_id=current_user.id).all()
+    chapters = Chapter.query.filter_by(user_id=current_user.id).all()
 
 
     if request.method == 'POST':
         try:
             event.description = request.form.get('description')
             event.storyline_id = request.form.get('storyline_id')
+            event.chapter_id = request.form.get('chapter_id')
             event.event_occurs_percent = request.form.get('occurs_percent')
         except KeyError:
             abort(400)
@@ -158,7 +244,26 @@ def event(event_id):
         db.session.commit()
         flash("Saved",category='message')
 
-    return render_template('event/event.html', event=event, castmembers=castmembers, storylines=storylines)
+    return render_template('event/event.html', event=event, castmembers=castmembers, storylines=storylines,chapters=chapters)
+
+@app.route('/book/<int:book_id>', methods=['POST', 'GET'])
+def book(book_id):
+    book = Book.query.get_or_404(book_id)
+    if not book.user_id == current_user.id:
+        abort(404)
+
+
+    if request.method == 'POST':
+        try:
+            book.title = request.form.get('title')
+        except KeyError:
+            abort(400)
+
+        db.session.add(book)
+        db.session.commit()
+        flash("Saved",category='message')
+
+    return render_template('book/book.html', book=book)
 
 @app.route('/events/<int:event_id>/set_status/<status>')
 def set_status(event_id, status):
