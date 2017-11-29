@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, abort, jsonify, flash
 from collections import defaultdict
 from flasktasks import app, db
-from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry, EventChar, Chapter
+from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry, EventChar, Chapter, Book
 from flasktasks.signals import event_created, storyline_created, castmember_created, chapter_created
 
 from flask_login import current_user
@@ -305,6 +305,13 @@ def new_tag():
         return render_template('tags/new.html', colors=colors)
 
 
+@app.route('/reader/<book_id>')
+def reader(book_id):
+    book = Book.query.get_or_404(book_id)
+    if not book.user_id == current_user.id:
+        abort(404)
+    return render_template('book/reader.html', book=book)
+
 @app.route('/log')
 def log():
     log_entries = LogEntry.query.filter_by(user_id=current_user.id).all()
@@ -378,34 +385,47 @@ from database.seed import create_defaults
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     form = EmailPasswordForm()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.username.data, password=form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        login_user(user, force=True)
-        #todo: create default event etc
-        # create_defaults(user.id)
-        return redirect(url_for('index'))
+    form2 = UsernamePasswordForm()
 
-    return render_template('signup.html', form=form)
+    if request.method == 'POST':
+
+        if form.validate_on_submit():
+            user = User(username=form.username.data, email=form.username.data, password=form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, force=True)
+            #todo: create default event etc
+            # create_defaults(user.id)
+            return redirect(url_for('index'))
+
+    return render_template('signup.html', form=form, form2=form2)
 
 @app.route('/signin', methods=["GET", "POST"])
 def signin():
-    form = UsernamePasswordForm()
+    form = EmailPasswordForm()
+    form2 = UsernamePasswordForm()
 
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first_or_404()
-        if user is None:
-            flash('Username or Password is invalid', 'error')
-            return redirect(url_for('login'))
 
-        if user.is_correct_password(form.password.data):
-            login_user(user, force=True)
-            flash('Logged in successfully')
-            return redirect(url_for('index'))
-        else:
-            return redirect(url_for('signin'))
-    return render_template('signin.html', form=form)
+    if request.method == 'POST':
+        # pass
+        try:
+            if form2.validate_on_submit():
+                user = User.query.filter_by(username=form2.username.data).first_or_404()
+                if user is None:
+                    flash('Username or Password is invalid', 'error')
+                    return redirect(url_for('login'))
+
+                if user.is_correct_password(form2.password.data):
+                    login_user(user, force=True)
+                    flash('Logged in successfully')
+                    return redirect(url_for('index'))
+                else:
+                    return redirect(url_for('signup'))
+
+        except Exception as e:
+            pass
+
+    return render_template('signup.html', form=form, form2=form2)
 
 
 
@@ -417,7 +437,8 @@ def signout():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    books = Book.query.filter_by(user_id=current_user.id).all()
+    return render_template('profile.html', books=books)
 
 @app.route('/settings')
 def settings():
@@ -470,3 +491,4 @@ def reset_with_token(token):
         return redirect(url_for('signin'))
 
     return render_template('reset_with_token.html', form=form, token=token)
+

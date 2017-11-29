@@ -1,4 +1,23 @@
 {% extends "base.html" %}
 {% block body %}
-about me; my useage:num chars, num words?
+
+<div class="container">
+    <div class="page-header form-group">
+        <h1>{{ current_user.username }}</h1>
+    </div>
+
+    <div class="row">
+        {% for b in books %}
+        <div class="card" style="width: 20rem;">
+            <!--<img class="card-img-top" src="..." alt="Card image cap">-->
+            <div class="card-body">
+            <h4 class="card-title">{{ b.title }}</h4>
+            <p class="card-text">{{ b.synopsis|safe }}</p>
+                <p>{{ b.chapters.count() }} chapters, {{ b.wordcount() }} words.</p>
+            <a href="{{ url_for('reader',book_id=b.id) }}" class="btn btn-primary">Read..</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

@@ -50,6 +50,12 @@ class Chapter(db.Model):
         self.synopsis=synopsis
         self.user_id = user_id
 
+    def wordcount(self):
+        c=0
+        for event in self.events:
+            c=c+event.wordcount()
+        return c
+
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -61,6 +67,13 @@ class Book(db.Model):
         self.title=title
         self.synopsis=synopsis
         self.user_id = user_id
+
+    def wordcount(self):
+        c=0
+        for chapter in self.chapters:
+            c=c+chapter.wordcount()
+        return c
+
 
 class EventChar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -96,6 +109,10 @@ class Event(db.Model):
         self.castmember_id = castmember_id
         self.event_occurs_percent = event_occurs_percent
         self.user_id = user_id
+
+    def wordcount(self):
+        c = self.description.split().__len__()
+        return c
 
 
 class Storyline(db.Model):
