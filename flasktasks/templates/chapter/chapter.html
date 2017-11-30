@@ -23,6 +23,15 @@
             <form method="POST">
 
                 <div class="form-group">
+                    <select class="form-control" name="book_id">
+                        <option value="-1">Select a Book</option>
+                        {% for book in books %}
+                            <option value="{{ book.id }}" {% if book.id==chapter.book_id %}selected="true"{% endif %} {{ book.id | is_selected }}>{{ book.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <input name="title" type="text" value="{{ chapter.title }}" class="form-control" placeholder="Title" required/>
                 </div>
 
@@ -57,6 +66,16 @@
 
 
 </form>
+
+
+        <div class="row kanban">
+            <div class="col-lg-12">
+                {% with title="Timeline", icon="leaf" %}
+                    {% include "chapter/kanban_chapter.html" %}
+                {% endwith %}
+            </div>
+        </div>
+
         </div>
     </div>
 </div>

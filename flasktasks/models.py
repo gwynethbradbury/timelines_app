@@ -40,6 +40,7 @@ class Chapter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     synopsis = db.Column(db.Text)
+    number = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     events = db.relationship('Event', backref='chapter', lazy='dynamic')
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=True)
@@ -67,6 +68,9 @@ class Book(db.Model):
         self.title=title
         self.synopsis=synopsis
         self.user_id = user_id
+    def style(self):
+        color = Color.GREY
+        return "tagged tag-%s" % color.name.lower()
 
     def wordcount(self):
         c=0
@@ -88,12 +92,11 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(70))
     description = db.Column(db.Text)
-    status = db.Column(db.Integer)
-    storyline_id = db.Column(db.Integer, db.ForeignKey('storyline.id'))
+    status = db.Column(db.Integer, default=1)
+    storyline_id = db.Column(db.Integer, db.ForeignKey('storyline.id'), nullable=True)
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=True)
-    # castmember_id = db.Column(db.Integer, db.ForeignKey('castmember.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    event_occurs_percent = db.Column(db.Float)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    event_occurs_percent = db.Column(db.Float, default=0.0)
 
 
     cast = relationship("Castmember",
@@ -105,10 +108,18 @@ class Event(db.Model):
         self.title = title
         self.description = description
         self.status = Status.TO_DO.value
-        self.storyline_id = storyline_id
-        self.castmember_id = castmember_id
+        if not storyline_id=='-1':
+            self.storyline_id = storyline_id
+        if not castmember_id == '-1':
+            self.castmember_id = castmember_id
         self.event_occurs_percent = event_occurs_percent
         self.user_id = user_id
+
+    def style(self):
+        if self.storyline is not None:
+            return self.storyline.tag.style()
+        else:
+            return "tagged tag-grey"
 
     def wordcount(self):
         c = self.description.split().__len__()

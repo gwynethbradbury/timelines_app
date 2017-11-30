@@ -55,7 +55,7 @@
 
                 <div class="form-group">
                     <select class="form-control" name="storyline_id">
-        {#                <option value="-1">Select a storyline</option>#}
+                        <option value="-1">Select a storyline</option>
                         {% for storyline in storylines %}
                             <option value="{{ storyline.id }}" {% if storyline.id==event.storyline_id %}selected="true"{% endif %} {{ storyline.id | is_selected }}>{{ storyline.title }}</option>
                         {% endfor %}
@@ -63,7 +63,7 @@
                 </div>
                 <div class="form-group">
                     <select class="form-control" name="chapter_id">
-        {#                <option value="-1">Select a chapter</option>#}
+                        <option value="-1" >Select a chapter</option>
                         {% for chapter in chapters %}
                             <option value="{{ chapter.id }}" {% if chapter.id==event.chapter_id %}selected="true"{% endif %} {{ chapter.id | is_selected }}>{{ chapter.title }}</option>
                         {% endfor %}
@@ -78,6 +78,13 @@
 
                 <button type="submit" class="btn btn-primary">Save!</button>
             </form>
+
+
+        <a href="{{ url_for('new_chapter') }}" class="btn btn-link new-item">
+            <span class="glyphicon glyphicon-plus"></span>New Chapter
+        </a>
+
+
 
 
 

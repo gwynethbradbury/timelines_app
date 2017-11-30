@@ -5,6 +5,16 @@
         <h1>New Chapter</h1>
     </div>
 
+
+    <div class="form-group">
+        <select class="form-control" name="book_id">
+            <option value="-1">Select a Book</option>
+            {% for book in books %}
+                <option value="{{ book.id }}" {{ book.id | is_selected }}>{{ book.title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
     <form method="POST">
         <div class="form-group">
             <input name="title" type="text" class="form-control" placeholder="Title" required>

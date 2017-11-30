@@ -1,5 +1,5 @@
 
-<form action="{{ url_for('events') }}" class=".form-horizontal" method="POST">
+<form action="{{ url_for('reorder_book_chapters',book_id=book.id) }}" class=".form-horizontal" method="POST">
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">Chapters<span class="glyphicon glyphicon-{{ icon }}"></span></h3>
@@ -9,7 +9,7 @@
             <table>
             <!--<tr class="timeline_line">-->
             <tr class="timeline_line" id="sortable-hor">
-                {% for chapter in chapters|sort(attribute='id') %}
+                {% for chapter in book.chapters|sort(attribute='number') %}
                 <!--<td style="padding-right: 15px; vertical-align: top; text-align: left">-->
                 <td style="padding-right: 15px; vertical-align: center; text-align: left; background: #fff; border-style:none"
                     class="ui-state-default" >
@@ -21,7 +21,7 @@
                         <p class="list-group-item-text">{{ chapter.synopsis[:500] |safe}}{% if chapter.synopsis|length>500 %}...{% endif %}</p>
                         <br/>
 
-                        {% include "chapter/kanban_timeline.html" %}
+                        {#<!--{% include "book/kanban_timeline.html" %}-->#}
                         <br/>
                     </a>
                 </span>
