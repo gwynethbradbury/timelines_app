@@ -31,17 +31,17 @@
 
     <p>{{book.synopsis|safe}}</p>
 
-        <a href="{{ url_for('new_chapter') }}" class="btn btn-link new-item">
-            <span class="glyphicon glyphicon-plus"></span>New Chapter
-        </a>
+    <a href="{{ url_for('new_chapter') }}" class="btn btn-link new-item">
+        <span class="glyphicon glyphicon-plus"></span>New Chapter
+    </a>
 
-        <div class="row kanban">
-            <div class="col-lg-12">
-                {% with title="Timeline", icon="leaf" %}
-                    {% include "book/kanban_chapter.html" %}
-                {% endwith %}
-            </div>
+    <div class="row kanban">
+        <div class="col-lg-12">
+            {% with title="Timeline", icon="leaf" %}
+                {% include "book/kanban_chapter.html" %}
+            {% endwith %}
         </div>
+    </div>
 
 
 

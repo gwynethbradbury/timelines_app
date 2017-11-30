@@ -1,33 +1,33 @@
 
-<!--<form action="{{ url_for('events') }}" class=".form-horizontal" method="POST">-->
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Events ({{chapter.events.count()}})<span class="glyphicon glyphicon-{{ icon }}"></span></h3>
-    </div>
-    <div class="panel-body" style="overflow: scroll">
-        <div class="list-group">
-            <table>
-            <!--<tr class="timeline_line">-->
-                {% for event in chapter.events|sort(attribute='event_occurs_percent') %}
-            <tr >
-                <!--<td style="padding-right: 15px; vertical-align: top; text-align: left">-->
-                <td style="padding-right: 15px; vertical-align: top; text-align: left; background: #fff; border-style:none"
-                    class="ui-state-default" >
-                <span>
-                <input type="text" style="visibility: collapse" id="{{ chapter.id }}" value="{{ chapter.id }}" name="eventhandles[]"/>
-                    <!--<a href="{{ url_for('chapter', chapter_id=chapter.id) }}" class="list-group-item " style="width:300px;">-->
-                        <h5>Event: {{event.title}}</h5>
-                    <h4 class="list-group-item-heading">{{ event.description|safe }}</h4>
-                    <br/>
-                <!--</a>-->
-                </span>
-                </td>
-            </tr>
-            {% endfor %}
-            </table>
+<!--&lt;!&ndash;<form action="{{ url_for('events') }}" class=".form-horizontal" method="POST">&ndash;&gt;-->
+<!--<div class="panel panel-default">-->
+    <!--<div class="panel-heading">-->
+        <!--<h3 class="panel-title">Events ({{chapter.events.count()}})<span class="glyphicon glyphicon-{{ icon }}"></span></h3>-->
+    <!--</div>-->
+    <!--<div class="panel-body" style="overflow: scroll">-->
+        <!--<div class="list-group">-->
+            <!--<table>-->
+            <!--&lt;!&ndash;<tr class="timeline_line">&ndash;&gt;-->
+                <!--{% for event in chapter.events|sort(attribute='event_occurs_percent') %}-->
+            <!--<tr >-->
+                <!--&lt;!&ndash;<td style="padding-right: 15px; vertical-align: top; text-align: left">&ndash;&gt;-->
+                <!--<td style="padding-right: 15px; vertical-align: top; text-align: left; background: #fff; border-style:none"-->
+                    <!--class="ui-state-default" >-->
+                <!--<span>-->
+                <!--<input type="text" style="visibility: collapse" id="{{ chapter.id }}" value="{{ chapter.id }}" name="eventhandles[]"/>-->
+                    <!--&lt;!&ndash;<a href="{{ url_for('chapter', chapter_id=chapter.id) }}" class="list-group-item " style="width:300px;">&ndash;&gt;-->
+                        <!--<h5>Event: {{event.title}}</h5>-->
+                    <!--<h4 class="list-group-item-heading">{{ event.description|safe }}</h4>-->
+                    <!--<br/>-->
+                <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                <!--</span>-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--{% endfor %}-->
+            <!--</table>-->
 
-        </div>
-    </div>
-</div>
-<!--<button type="submit" class="btn btn-default">Save</button>-->
-<!--</form>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash;<button type="submit" class="btn btn-default">Save</button>&ndash;&gt;-->
+<!--&lt;!&ndash;</form>&ndash;&gt;-->
