@@ -57,6 +57,12 @@ class Chapter(db.Model):
             c=c+event.wordcount()
         return c
 
+    def style(self):
+        if self.book is not None:
+            return self.book.style()
+        else:
+            return "tagged tag-grey"
+
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -68,8 +74,9 @@ class Book(db.Model):
         self.title=title
         self.synopsis=synopsis
         self.user_id = user_id
+
     def style(self):
-        color = Color.GREY
+        color = Color(1+self.id%4)
         return "tagged tag-%s" % color.name.lower()
 
     def wordcount(self):

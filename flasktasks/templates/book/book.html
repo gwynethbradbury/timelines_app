@@ -43,6 +43,26 @@
         </div>
     </div>
 
+    <h2>Chapter List</h2>
+    <div class="list-group">
+    {% for chapter in book.chapters|sort(attribute='number') %}
+        <a href="{{ url_for('chapter', chapter_id=chapter.id) }}" class="list-group-item {{ chapter.style() }}">
+            <div class="row">
+                <div class="col-sm-11">
+                    <h4 class="list-group-item-header">{{ chapter.title }}</h4>
+                    <p class="list-group-item-text">{{ chapter.synopsis|safe }}</p>
+                    <div class="chapter-item-additional-content">
+                        {{ book | html_dispatch("chapter_list_item_additional_content") }}
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <span class="badge badge-big badge-blue">{{ chapter.events.count() }}</span>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+    </div>
+
 
 
 

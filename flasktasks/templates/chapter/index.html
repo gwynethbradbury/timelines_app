@@ -1,26 +1,11 @@
 {% extends "base.html" %}
 {% block additionalscripts %}
 
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <style>
-    #sortable-hor > div { float: left; }
-  </style>
-
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-      $( function() {
-        <!--$( "#sortable" ).sortable();-->
-        <!--$( "#sortable" ).disableSelection();-->
-        var $sortables =$( "#sortable-hor" ).sortable();
-        $( "#sortable-hor" ).disableSelection();
-      } );
-  </script>
-
 
 {% endblock %}
 {% block body %}
+
+
 <div class="container">
     <div class="page-header">
         <h1>Chapters<small class="float-right">
@@ -28,22 +13,34 @@
         </small></h1>
     </div>
 
-
-
-        <a href="{{ url_for('new_chapter') }}" class="btn btn-link new-item">
-            <span class="glyphicon glyphicon-plus"></span>New Chapter
-        </a>
-
-        <div class="row kanban">
-            <div class="col-lg-12">
-                {% with title="Timeline", icon="leaf" %}
-                    {% include "chapter/kanban_chapter.html" %}
-                {% endwith %}
-            </div>
-        </div>
-
-
-
-
+    <div class="btn-group event-control" role="group">
+        <a href="{{ url_for('new_chapter') }}" class="btn btn-link new-book"><span class="glyphicon glyphicon-plus"></span><span>New Chapter</span></a>
+    </div>
+    <div class="list-group">
+        {% for chapter in chapters|sort(attribute='book_id') %}
+            <a href="{{ url_for('chapter', chapter_id=chapter.id) }}" class="list-group-item {{ chapter.style() }}">
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h4 class="list-group-item-header">{{ chapter.title }}</h4>
+                        <p class="list-group-item-text">{{ chapter.synopsis|safe }}</p>
+                        <div class="chapter-item-additional-content">
+                            {{ book | html_dispatch("chapter_list_item_additional_content") }}
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <span class="badge badge-big badge-blue">{{ chapter.events.count() }}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
 </div>
+
+
+
+
+
+
+
+
 {% endblock %}

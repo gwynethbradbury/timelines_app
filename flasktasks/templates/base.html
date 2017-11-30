@@ -148,23 +148,23 @@
                             <a class="dropdown-item" href="{{ url_for('signout') }}">Log out</a>
                         </div>
                     </li>
-
-                    <!--<li class="nav-item ">-->
-                    <li class="nav-item {{ url_for('storylines') | is_current_page }}">
-                        <a class="nav-link" href="{{ url_for('storylines') }}">Storylines</a>
+                    <li class="nav-item {{ url_for('castmembers') | is_current_page }}">
+                        <a class="nav-link" href="{{ url_for('castmembers') }}">Cast</a>
+                    </li>
+                    <li class="nav-item {{ url_for('books') | is_current_page }}">
+                        <a class="nav-link" href="{{ url_for('books') }}">Books</a>
+                    </li>
+                    <li class="nav-item {{ url_for('chapters') | is_current_page }}">
+                        <a class="nav-link" href="{{ url_for('chapters') }}">Chapters</a>
                     </li>
                     <!--<li class="nav-item ">-->
                     <li class="nav-item {{ url_for('events') | is_current_page }}">
                         <a class="nav-link" href="{{ url_for('events') }}">Events</a>
                     </li>
-                    <li class="nav-item {{ url_for('castmembers') | is_current_page }}">
-                        <a class="nav-link" href="{{ url_for('castmembers') }}">Cast</a>
-                    </li>
-                    <li class="nav-item {{ url_for('chapters') | is_current_page }}">
-                        <a class="nav-link" href="{{ url_for('chapters') }}">Chapters</a>
-                    </li>
-                    <li class="nav-item {{ url_for('books') | is_current_page }}">
-                        <a class="nav-link" href="{{ url_for('books') }}">Books</a>
+
+                    <!--<li class="nav-item ">-->
+                    <li class="nav-item {{ url_for('storylines') | is_current_page }}">
+                        <a class="nav-link" href="{{ url_for('storylines') }}">Storylines</a>
                     </li>
                     {% endif %}
 

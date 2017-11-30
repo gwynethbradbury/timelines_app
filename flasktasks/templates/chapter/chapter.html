@@ -18,7 +18,7 @@
 
     <div class="row">
 
-        <div class="col-sm-9">
+        <div class="col">
 
             <form method="POST">
 
@@ -68,15 +68,38 @@
 </form>
 
 
+        </div>
+    </div>
+
+
         <div class="row kanban">
-            <div class="col-lg-12">
+            <div class="col">
                 {% with title="Timeline", icon="leaf" %}
                     {% include "chapter/kanban_chapter.html" %}
                 {% endwith %}
             </div>
         </div>
 
-        </div>
+
+
+
+
+
+    <h2>Event List</h2>
+    <div class="list-group">
+    {% for event in chapter.events|sort(attribute='event_occurs_percent') %}
+        <a href="{{ url_for('event', event_id=chapter.id) }}" class="list-group-item {{ event.style() }}">
+            <div class="row">
+                <div class="col-sm-11">
+                    <h4 class="list-group-item-header">{{ event.title }}</h4>
+                    <p class="list-group-item-text">{{ chapter.description|safe }}</p>
+                    <div class="chapter-item-additional-content">
+                        {{ event | html_dispatch("event_list_item_additional_content") }}
+                    </div>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
     </div>
 </div>
 
