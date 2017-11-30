@@ -230,8 +230,17 @@ def new_event():
         chapters = Chapter.query.filter_by(user_id=current_user.id).all()
         return render_template('event/new.html', storylines=storylines, castmembers = castmembers, chapters=chapters)
 
-@app.route('/chapters/<int:chapter_id>', methods=['POST', 'GET'])
+@app.route('/chapters/<int:chapter_id>')
 def chapter(chapter_id):
+    chapter = Chapter.query.get_or_404(chapter_id)
+    if not chapter.user_id == current_user.id:
+        abort(404)
+
+    books = Book.query.filter_by(user_id=current_user.id).all()
+    return render_template('chapter/chapter.html', chapter=chapter, books=books)
+
+@app.route('/chapters/<int:chapter_id>/edit', methods=['POST', 'GET'])
+def edit_chapter(chapter_id):
     chapter = Chapter.query.get_or_404(chapter_id)
     if not chapter.user_id == current_user.id:
         abort(404)
@@ -248,8 +257,9 @@ def chapter(chapter_id):
         db.session.commit()
         flash("Saved",category='message')
 
+        return redirect(url_for('chapter',chapter_id=chapter_id))
     books = Book.query.filter_by(user_id=current_user.id).all()
-    return render_template('chapter/chapter.html', chapter=chapter, books=books)
+    return render_template('chapter/edit.html', chapter=chapter, books=books)
 
 
 @app.route('/events/<int:event_id>', methods=['POST', 'GET'])
@@ -277,8 +287,16 @@ def event(event_id):
 
     return render_template('event/event.html', event=event, castmembers=castmembers, storylines=storylines,chapters=chapters)
 
-@app.route('/book/<int:book_id>', methods=['POST', 'GET'])
+@app.route('/book/<int:book_id>')
 def book(book_id):
+    book = Book.query.get_or_404(book_id)
+    if not book.user_id == current_user.id:
+        abort(404)
+
+    return render_template('book/book.html', book=book)
+
+@app.route('/book/<int:book_id>/edit', methods=['POST', 'GET'])
+def edit_book(book_id):
     book = Book.query.get_or_404(book_id)
     if not book.user_id == current_user.id:
         abort(404)
@@ -293,8 +311,11 @@ def book(book_id):
         db.session.add(book)
         db.session.commit()
         flash("Saved",category='message')
+        return redirect(url_for('book',book_id=book_id))
 
-    return render_template('book/book.html', book=book)
+    return render_template('book/edit.html', book=book)
+
+
 
 @app.route('/events/<int:event_id>/set_status/<status>')
 def set_status(event_id, status):

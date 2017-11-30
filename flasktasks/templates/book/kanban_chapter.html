@@ -15,14 +15,11 @@
                     class="ui-state-default" >
                 <span>
                 <input type="text" style="visibility: collapse" id="{{ chapter.id }}" value="{{ chapter.id }}" name="handles[]"/>
-                    <a href="{{ url_for('chapter', chapter_id=chapter.id) }}" class="list-group-item " style="width:300px;">
-                        <!--<h5>Chapter: {{chapter.title}}</h5>-->
-                        <h4 class="list-group-item-heading">{{ chapter.title }}</h4>
-                        <p class="list-group-item-text">{{ chapter.synopsis[:500] |safe}}{% if chapter.synopsis|length>500 %}...{% endif %}</p>
-                        <br/>
-
-                        {#<!--{% include "book/kanban_timeline.html" %}-->#}
-                        <br/>
+                    <a href="{{ url_for('chapter', chapter_id=chapter.id) }}" class="card " style="width:300px;">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ chapter.title }}</h4>
+                            <p class="card-body">{{ chapter.synopsis[:500] |safe}}{% if chapter.synopsis|length>500 %}...{% endif %}</p>
+                        </div>
                     </a>
                 </span>
                 </td>

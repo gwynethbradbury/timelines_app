@@ -2,27 +2,30 @@
 <form action="{{ url_for('reorder_book_chapters',book_id=1) }}" class=".form-horizontal" method="POST">
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Reorder events sequence<span class="glyphicon glyphicon-{{ icon }}"></span></h3>
+        <h3 class="panel-title">
+            Reorder events sequence<span class="glyphicon glyphicon-{{ icon }}"></span>
+            <!--<a href="{{ url_for('new_event') }}" class="btn btn-link new-item float-right">-->
+                <!--<span class="glyphicon glyphicon-plus"></span>New Event-->
+            <!--</a>-->
+        </h3>
     </div>
     <div class="panel-body" style="overflow: scroll">
         <div class="list-group">
             <table>
             <!--<tr class="timeline_line">-->
-            <tr class="timeline_line" id="sortable-hor">{{chapter.title}}
+            <tr class="timeline_line" id="sortable-hor">
                 {% for event in chapter.events|sort(attribute='id') %}
                 <!--<td style="padding-right: 15px; vertical-align: top; text-align: left">-->
                 <td style="padding-right: 15px; vertical-align: center; text-align: left; background: #fff; border-style:none"
                     class="ui-state-default" >
                 <span>
                 <input type="text" style="visibility: collapse" id="{{ chapter.id }}" value="{{ event.id }}" name="handles[]"/>
-                    <a href="{{ url_for('event', event_id=event.id) }}" class="list-group-item " style="width:300px;">
-                        <!--<h5>event: {{event.title}}</h5>-->
-                        <h4 class="list-group-item-heading">{{ event.title }}</h4>
-                        <p class="list-group-item-text">{{ event.description[:500] |safe}}{% if event.description|length>500 %}...{% endif %}</p>
-                        <br/>
-
-                        {#<!--{% include "book/kanban_timeline.html" %}-->#}
-                        <br/>
+                    <a href="{{ url_for('event', event_id=event.id) }}" class="card " style="width:300px;">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ event.title }}</h4>
+                            <p class="card-body">{{ event.description[:500] |safe}}{% if event.description|length>500 %}...{% endif %}</p>
+                            {#<!--{% include "book/kanban_timeline.html" %}-->#}
+                        </div>
                     </a>
                 </span>
                 </td>

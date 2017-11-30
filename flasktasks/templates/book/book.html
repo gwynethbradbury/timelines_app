@@ -23,9 +23,11 @@
 {% block body %}
 <div class="container">
     <div class="page-header">
-        <h1>{{book.title}}<small class="float-right">
-            All Chapters
-        </small></h1>
+        <h1>{{book.title}}<small class="float-right">All Chapters</small></h1>
+
+        <a href="{{ url_for('edit_book', book_id=book.id) }}" class="btn btn-link new-item">
+            <span class="glyphicon glyphicon-pencil"></span>Edit
+        </a>
     </div>
 
 
@@ -56,7 +58,7 @@
                     </div>
                 </div>
                 <div class="col-sm-1">
-                    <span class="badge badge-big badge-blue">{{ chapter.events.count() }}</span>
+                    <span class="badge badge-pill badge-big badge-info">{{ chapter.events.count() }}</span>
                 </div>
             </div>
         </a>
