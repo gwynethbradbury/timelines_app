@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1df8019e-1a81-4682-82a3-f11227e13622" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/flasktasks/templates/book/reader.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/models.py" afterPath="$PROJECT_DIR$/flasktasks/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/templates/base.html" afterPath="$PROJECT_DIR$/flasktasks/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/templates/profile.html" afterPath="$PROJECT_DIR$/flasktasks/templates/profile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/templates/signup.html" afterPath="$PROJECT_DIR$/flasktasks/templates/signup.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/flasktasks/views.py" afterPath="$PROJECT_DIR$/flasktasks/views.py" />
-    </list>
+    <list default="true" id="1df8019e-1a81-4682-82a3-f11227e13622" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
