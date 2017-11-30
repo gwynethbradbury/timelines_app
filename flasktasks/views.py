@@ -218,11 +218,11 @@ def new_event():
         db.session.commit()
         event_created.send(event)
         if not request.form.get('chapter_id')=='-1':
-            return redirect('/chapters?chapter_id={}'.format(request.form.get('chapter_id')))
-        if not request.form.get('storyline_id')=='-1':
-            return redirect('/events?storyline_id={}'.format(request.form.get('storyline_id')))
-        if not request.form.get('castmember_id')=='-1':
-            return redirect('/events?castmember_id={}'.format(request.form.get('castmember_id')))
+            return redirect(url_for('chapter', chapter_id=request.form.get('chapter_id')))
+        # if not request.form.get('storyline_id')=='-1':
+        #     return redirect('/events?storyline_id={}'.format(request.form.get('storyline_id')))
+        # if not request.form.get('castmember_id')=='-1':
+        #     return redirect('/events?castmember_id={}'.format(request.form.get('castmember_id')))
         return redirect('/events')
     else:
         storylines = Storyline.query.filter_by(user_id=current_user.id).all()
@@ -262,8 +262,21 @@ def edit_chapter(chapter_id):
     return render_template('chapter/edit.html', chapter=chapter, books=books)
 
 
-@app.route('/events/<int:event_id>', methods=['POST', 'GET'])
+@app.route('/events/<int:event_id>')
 def event(event_id):
+    event = Event.query.get_or_404(event_id)
+    if not event.user_id == current_user.id:
+        abort(404)
+    castmembers = Castmember.query.filter_by(user_id=current_user.id).all()
+    storylines = Storyline.query.filter_by(user_id=current_user.id).all()
+    chapters = Chapter.query.filter_by(user_id=current_user.id).all()
+
+
+
+    return render_template('event/event.html', event=event, castmembers=castmembers, storylines=storylines,chapters=chapters)
+
+@app.route('/events/<int:event_id>/edit', methods=['POST', 'GET'])
+def edit_event(event_id):
     event = Event.query.get_or_404(event_id)
     if not event.user_id == current_user.id:
         abort(404)
@@ -274,18 +287,21 @@ def event(event_id):
 
     if request.method == 'POST':
         try:
+            event.title = request.form.get('title')
             event.description = request.form.get('description')
-            event.storyline_id = request.form.get('storyline_id')
-            event.chapter_id = request.form.get('chapter_id')
-            event.event_occurs_percent = request.form.get('occurs_percent')
+            # event.storyline_id = request.form.get('storyline_id')
+            if not request.form.get('chapter_id')=='-1':
+                event.chapter_id = request.form.get('chapter_id')
+            # event.event_occurs_percent = request.form.get('occurs_percent')
         except KeyError:
             abort(400)
 
         db.session.add(event)
         db.session.commit()
         flash("Saved",category='message')
+        return redirect(url_for('event',event_id=event.id))
 
-    return render_template('event/event.html', event=event, castmembers=castmembers, storylines=storylines,chapters=chapters)
+    return render_template('event/edit.html', event=event, castmembers=castmembers, storylines=storylines,chapters=chapters)
 
 @app.route('/book/<int:book_id>')
 def book(book_id):

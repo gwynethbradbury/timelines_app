@@ -11,103 +11,30 @@
 <div class="container">
     <div class="page-header">
         <h1>{{ event.title }}</h1>
+        <a href="{{ url_for('edit_event', event_id=event.id) }}" class="btn btn-link new-item">
+            <span class="glyphicon glyphicon-pencil"></span>Edit
+        </a>
     </div>
 
     <div class="row">
-
         <div class="col-sm-9">
 
+        <p>{{event.description|safe}}</p>
 
 
-
-            <!--<form></form>-->
-
-
-
-
-
-
-
-            <form method="POST">
-                <div id="wysihtml5-toolbar" style="display: none;">
-                    <a data-wysihtml5-command="bold" class="btn btn-info"><strong>B</strong></a>
-                    <a data-wysihtml5-command="italic" class="btn btn-info"><i>I</i></a>
-
-                    <!--&lt;!&ndash; Some wysihtml5 commands require extra parameters &ndash;&gt;-->
-                    <!--<a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red">red</a>-->
-                    <!--<a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green">green</a>-->
-                    <!--<a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue">blue</a>-->
-
-                    <!-- Some wysihtml5 commands like 'createLink' require extra paramaters specified by the user (eg. href) -->
-                    <!--<a data-wysihtml5-command="createLink" class="btn btn-info">html</a>-->
-                    <!--<div data-wysihtml5-dialog="createLink" style="display: none;">-->
-                        <!--<label>-->
-                            <!--Link:-->
-                            <!--<input data-wysihtml5-dialog-field="href" value="http://" class="text">-->
-                        <!--</label>-->
-                        <!--<a data-wysihtml5-dialog-action="save">OK</a> <a data-wysihtml5-dialog-action="cancel">Cancel</a>-->
-                    <!--</div>-->
-                </div>
-                <div class="form-group">
-                    <!--<textarea name="description" class="form-control" rows="3" placeholder="Describe at will">{{ event.description }}</textarea>-->
-                    <textarea name="description" class="form-control" rows="3" placeholder="Describe at will" id="wysihtml5-textarea" autofocus>{{ event.description }}</textarea>
-                </div>
-
-                <div class="form-group">
-                    <select class="form-control" name="storyline_id">
-                        <option value="-1">Select a storyline</option>
-                        {% for storyline in storylines %}
-                            <option value="{{ storyline.id }}" {% if storyline.id==event.storyline_id %}selected="true"{% endif %} {{ storyline.id | is_selected }}>{{ storyline.title }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select class="form-control" name="chapter_id">
-                        <option value="-1" >Select a chapter</option>
-                        {% for chapter in chapters %}
-                            <option value="{{ chapter.id }}" {% if chapter.id==event.chapter_id %}selected="true"{% endif %} {{ chapter.id | is_selected }}>{{ chapter.title }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <!--<input name="occurs_percent" type="number" class="form-control" placeholder="When does this happen?" value="{{ event.event_occurs_percent }}">-->
-
-                    <input type="range" name="occurs_percent" min="0" max="100" value="{{ event.event_occurs_percent }}">
-                </div>
-
-                <button type="submit" class="btn btn-primary">Save!</button>
-            </form>
-
-
-        <a href="{{ url_for('new_chapter') }}" class="btn btn-link new-item">
-            <span class="glyphicon glyphicon-plus"></span>New Chapter
-        </a>
-
-
-
-
-
-            <br/>
-
-            <p class="lead">
-                <i>Character(s):
-                    {% for c in event.cast %}<a href="{{ url_for("events", castmember_id=c.id) }}" class="color-{{ c.initials }}">{{ c.name }}</a> {% endfor %}
-                </i>
-            </p>
         </div>
         <div class="col-sm-3 event-control">
-            <p>Assign event:</p>
-            <div class="btn-group btn-group-justified" role="group">
-                {% for c in castmembers %}
-                    <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=c.id) }}" class="btn btn-{{ loop.index0 % 6  }}">{{ c.initials }}</a>
-                {% endfor %}
-            </div>
-            <div class="btn-group btn-group-justified" role="group">
-                <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=-1) }}" class="btn btn-link">
+{#            <p>Assign event:</p>#}
+{#            <div class="btn-group btn-group-justified" role="group">#}
+{#                {% for c in castmembers %}#}
+{#                    <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=c.id) }}" class="btn btn-{{ loop.index0 % 6  }}">{{ c.initials }}</a>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#            <div class="btn-group btn-group-justified" role="group">#}
+{#                <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=-1) }}" class="btn btn-link">#}
 {#                    <span class="glyphicon glyphicon-trash"></span>#}
-                    Unassign</a>
-            </div>
+{#                    Unassign</a>#}
+{#            </div>#}
 {#        </div>#}
 {##}
 {#        <div class="col-sm-3 task-control">#}

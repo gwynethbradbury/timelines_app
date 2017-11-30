@@ -13,14 +13,14 @@
             <textarea name="description" class="form-control" rows="3" placeholder="Describe at will"></textarea>
         </div>
         
-        <div class="form-group">
-            <select class="form-control" name="storyline_id">
-                <option value="-1">Select a storyline</option>
-                {% for storyline in storylines %}
-                    <option value="{{ storyline.id }}" {{ storyline.id | is_selected }}>{{ storyline.title }}</option>
-                {% endfor %}
-            </select>
-        </div>
+        <!--<div class="form-group">-->
+            <!--<select class="form-control" name="storyline_id">-->
+                <!--<option value="-1">Select a storyline</option>-->
+                <!--{% for storyline in storylines %}-->
+                    <!--<option value="{{ storyline.id }}" {{ storyline.id | is_selected }}>{{ storyline.title }}</option>-->
+                <!--{% endfor %}-->
+            <!--</select>-->
+        <!--</div>-->
 
         <div class="form-group">
             <select class="form-control" name="chapter_id">
@@ -31,14 +31,14 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <select class="form-control" name="castmember_id">
-                <option value="-1">Select a main character</option>
-                {% for castmember in castmembers %}
-                    <option value="{{ castmember.id }}" {{ castmember.id | is_selected }}>{{ castmember.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
+        <!--<div class="form-group">-->
+            <!--<select class="form-control" name="castmember_id">-->
+                <!--<option value="-1">Select a main character</option>-->
+                <!--{% for castmember in castmembers %}-->
+                    <!--<option value="{{ castmember.id }}" {{ castmember.id | is_selected }}>{{ castmember.name }}</option>-->
+                <!--{% endfor %}-->
+            <!--</select>-->
+        <!--</div>-->
 
         <!--<div class="form-group">-->
             <!--<input name="occurs_percent" type="number" class="form-control" placeholder="When does this happen?">-->
