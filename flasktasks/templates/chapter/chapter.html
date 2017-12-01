@@ -1,18 +1,30 @@
 {% extends "base.html" %}
-
 {% block additionalscripts %}
-    <!-- wysihtml5 parser rules -->
-    <script src="{{ url_for('static',filename='wysihtml5/parser_rules/advanced.js') }}"></script>
-    <!-- Library -->
-    <script src="{{ url_for('static',filename='wysihtml5/dist/wysihtml5-0.3.0.min.js') }}"></script>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+    #sortable-hor > div { float: left; }
+  </style>
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+      $( function() {
+        <!--$( "#sortable" ).sortable();-->
+        <!--$( "#sortable" ).disableSelection();-->
+        var $sortables =$( "#sortable-hor" ).sortable();
+        $( "#sortable-hor" ).disableSelection();
+      } );
+  </script>
+
+
 {% endblock %}
 
 {% block body %}
 <div class="container">
     <div class="page-header ">
-        <h1>
-            {{chapter.title}}<small class="float-right">All Events</small>
-        </h1>
+        <h1>{{chapter.title}}<small class="float-right">All Events</small></h1>
         <a href="{{ url_for('edit_chapter', chapter_id=chapter.id) }}" class="btn btn-link new-item">
             <span class="glyphicon glyphicon-pencil"></span>Edit
         </a>
@@ -56,12 +68,5 @@
     </div>
 </div>
 
-
-<script>
-var editor = new wysihtml5.Editor("wysihtml5-textarea", { // id of textarea element
-  toolbar:      "wysihtml5-toolbar", // id of toolbar element
-  parserRules:  wysihtml5ParserRules // defined in parser rules set
-});
-</script>
 
 {% endblock %}

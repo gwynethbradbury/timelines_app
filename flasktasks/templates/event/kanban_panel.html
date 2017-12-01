@@ -4,7 +4,7 @@
     </div>
     <div class="panel-body">
         <div class="list-group">
-            {% for event in events[status]|sort(attribute='event_occurs_percent') %}
+            {% for event in events[status]|sort(attribute='chapter_id') %}
                 <a href="{{ url_for('event', event_id=event.id) }}" class="list-group-item {{ event.style() }}">
                     <h4 class="list-group-item-heading">{{ event.title }} {{ event.event_occurs_percent }}</h4>
                     <p class="list-group-item-text">{{ event.description|safe }}</p>

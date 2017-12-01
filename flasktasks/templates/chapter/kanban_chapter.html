@@ -1,5 +1,5 @@
 
-<form action="{{ url_for('reorder_book_chapters',book_id=1) }}" class=".form-horizontal" method="POST">
+<form action="{{ url_for('reorder_chapter_events',chapter_id=chapter.id) }}" class=".form-horizontal" method="POST">
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
@@ -14,7 +14,7 @@
             <table>
             <!--<tr class="timeline_line">-->
             <tr class="timeline_line" id="sortable-hor">
-                {% for event in chapter.events|sort(attribute='id') %}
+                {% for event in chapter.events|sort(attribute='event_occurs_percent') %}
                 <!--<td style="padding-right: 15px; vertical-align: top; text-align: left">-->
                 <td style="padding-right: 15px; vertical-align: center; text-align: left; background: #fff; border-style:none"
                     class="ui-state-default" >

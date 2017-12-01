@@ -46,10 +46,12 @@ class Chapter(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=True)
 
 
-    def __init__(self,title,synopsis,user_id):
+    def __init__(self,title,synopsis,user_id,book_id):
         self.title=title
         self.synopsis=synopsis
         self.user_id = user_id
+        if not book_id=='-1':
+            self.book_id = book_id
 
     def wordcount(self):
         c=0
@@ -111,7 +113,7 @@ class Event(db.Model):
                     backref="events")
 
 
-    def __init__(self, user_id, title, description, storyline_id, castmember_id, event_occurs_percent=0):
+    def __init__(self, user_id, title, description, storyline_id='-1', castmember_id='-1',chapter_id='-1', event_occurs_percent=0):
         self.title = title
         self.description = description
         self.status = Status.TO_DO.value
@@ -119,6 +121,8 @@ class Event(db.Model):
             self.storyline_id = storyline_id
         if not castmember_id == '-1':
             self.castmember_id = castmember_id
+        if not chapter_id == '-1':
+            self.chapter_id = chapter_id
         self.event_occurs_percent = event_occurs_percent
         self.user_id = user_id
 
@@ -205,10 +209,10 @@ class LogEntry(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
-    def __init__(self, message):
+    def __init__(self, message,uid):
         self.message = message
         self.timestamp = strftime("%d-%m-%Y %H:%M:%S")
-        self.user_id = 1
+        self.user_id = uid
 
 
 

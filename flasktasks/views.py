@@ -54,13 +54,6 @@ def chapters():
 @app.route('/reorder_book_chapters/<book_id>', methods=['POST', 'GET'])
 def reorder_book_chapters(book_id):
     if request.method == 'POST':
-    #     import json
-    #
-    #     myJson = json.loads('sortables')
-    #
-    #     param3b1 = myJson['abo']['param3'][1]['param3b1']
-    #
-
         names = request.form.getlist('handles[]')
         new_num=0
         for n in names:
@@ -74,6 +67,24 @@ def reorder_book_chapters(book_id):
 
 
     return redirect('book/{}'.format(book_id))
+
+@app.route('/reorder_chapter_events/<chapter_id>', methods=['POST', 'GET'])
+def reorder_chapter_events(chapter_id):
+    if request.method == 'POST':
+
+        names = request.form.getlist('handles[]')
+        new_num=0
+        for n in names:
+            event = Event.query.get_or_404(int(n))
+
+            event.event_occurs_percent = new_num
+            new_num=new_num+1
+
+            db.session.add(event)
+        db.session.commit()
+
+
+    return redirect('chapters/{}'.format(chapter_id))
 
 @app.route('/events', methods=['POST', 'GET'])
 def events():
@@ -194,7 +205,7 @@ def new_chapter():
         # else:
         #     occurs_percent=0
         chapter = Chapter(user_id=current_user.id, title=request.form.get('title'),
-                           synopsis=request.form.get('synopsis'))
+                           synopsis=request.form.get('synopsis'), book_id=request.form.get('book_id'))
         db.session.add(chapter)
         db.session.commit()
         chapter_created.send(chapter)
@@ -213,6 +224,7 @@ def new_event():
                     description=request.form.get('description'),
                     storyline_id=request.form.get('storyline_id'),
                     castmember_id=request.form.get('castmember_id'),
+                    chapter_id=request.form.get('chapter_id'),
                       event_occurs_percent=occurs_percent)
         db.session.add(event)
         db.session.commit()
@@ -443,7 +455,7 @@ from util.security import ts
 from util.email import send_email
 from .models import User
 from flask_login import login_user, logout_user, current_user, login_required
-from .forms import UsernamePasswordForm, EmailForm, PasswordForm
+from .forms import UsernamePasswordForm, EmailForm, PasswordForm, ChangePasswordForm
 
 # from flask.ext.login import login_user , logout_user , current_user , login_required
 
@@ -557,9 +569,64 @@ def profile():
     books = Book.query.filter_by(user_id=current_user.id).all()
     return render_template('profile.html', books=books)
 
-@app.route('/settings')
+@app.route('/settings', methods=["GET", "POST"])
 def settings():
-    return render_template('settings.html')
+    form=ChangePasswordForm()
+    user = User.query.filter_by(id=current_user.id).first_or_404()
+
+    if form.validate_on_submit():
+        if form.password.data==form.repeatpassword.data:
+            user.password=(form.password.data)
+
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for("index"))
+
+
+    return render_template('settings.html', form=form)
+
+@app.route('/deleteaccount', methods=["GET","POST"])
+def delete_account():
+    user = User.query.filter_by(id=current_user.id).first_or_404()
+
+    if request.method == 'POST':
+
+        events=Event.query.filter_by(user_id=current_user.id).all()
+        for e in events:
+            db.session.delete(e)
+        chapters=Chapter.query.filter_by(user_id=current_user.id).all()
+        for e in chapters:
+            ECs = EventChar.query.filter_by(event_id=e.id).all()
+            for ec in ECs:
+                db.session.delete(ec)
+            db.session.delete(e)
+        books=Book.query.filter_by(user_id=current_user.id).all()
+        for e in books:
+            db.session.delete(e)
+        storylines=Storyline.query.filter_by(user_id=current_user.id).all()
+        for e in storylines:
+            db.session.delete(e)
+        tags=Tag.query.filter_by(user_id=current_user.id).all()
+        for e in tags:
+            db.session.delete(e)
+        cast=Castmember.query.filter_by(user_id=current_user.id).all()
+        for e in cast:
+            db.session.delete(e)
+        log=LogEntry.query.filter_by(user_id=current_user.id).all()
+        for e in log:
+            db.session.delete(e)
+
+
+        logout_user()
+        db.session.delete(user)
+
+        db.session.commit()
+
+        return redirect(url_for("index"))
+
+
+    return render_template('deleteaccount.html')
 
 @app.route('/reset', methods=["GET", "POST"])
 def reset():

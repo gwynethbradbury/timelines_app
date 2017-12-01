@@ -12,8 +12,13 @@ from wtforms.validators import DataRequired, Email
 class UsernamePasswordForm(Form):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+
 class EmailPasswordForm(Form):
     username = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    repeatpassword = PasswordField('Repeat Password', validators=[DataRequired()])
+
+class ChangePasswordForm(Form):
     password = PasswordField('Password', validators=[DataRequired()])
     repeatpassword = PasswordField('Repeat Password', validators=[DataRequired()])
 
