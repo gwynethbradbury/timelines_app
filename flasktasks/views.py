@@ -469,6 +469,25 @@ def create_account():
         )
         db.session.add(user)
         db.session.commit()
+        uid = user.id
+
+        defaultuser = User.query.filter_by(email='default').first_or_404()
+        books = Book.query.filter_all(user_id=defaultuser.id).all()
+
+        for b in books:
+            bc = Book(b.title,b.synopsis,uid)
+            db.session.add(bc)
+            db.session.commit()
+
+            for c in b.chapters:
+                cc=Chapter(c.title,c.synopsis,uid,bc.id)
+                db.session.add(cc)
+                db.session.commit()
+
+                for e in c.events:
+                    ec=Event(uid,e.title,e.description,'-1','-1',cc.id,e.event_occurs_percent)
+                    db.session.add(ec)
+                db.session.commit()
 
         # Now we'll send the email confirmation link
         subject = "Confirm your email"
@@ -522,9 +541,48 @@ def signup():
             user = User(username=form.username.data, email=form.username.data, password=form.password.data)
             db.session.add(user)
             db.session.commit()
+
+            uid=user.id
+            defaultuser = User.query.filter_by(email='default').first_or_404()
+            books = Book.query.filter_by(user_id=defaultuser.id).all()
+
+            for b in books:
+                bc = Book(b.title, b.synopsis, uid)
+                db.session.add(bc)
+                db.session.commit()
+
+                for c in b.chapters:
+                    cc = Chapter(c.title, c.synopsis, uid, bc.id)
+                    db.session.add(cc)
+                    db.session.commit()
+
+                    for e in c.events:
+                        ec = Event(uid, e.title, e.description, '-1', '-1', cc.id, e.event_occurs_percent)
+                        db.session.add(ec)
+                    db.session.commit()
+
+            # SEND CONFIRMATION EMAIL
+            subject = "Account created at {}.".format("Timelines")
+
+            # Here we use the URLSafeTimedSerializer we created in `util` at the
+            # beginning of the chapter
+            token = ts.dumps(user.email, salt='recover-key')
+
+            recover_url = url_for(
+                'reset_with_token',
+                token=token,
+                _external=True)
+
+            html = render_template(
+                'email/create_account.html')
+
+            # Let's assume that send_email was defined in myapp/util.py
+            send_email(user.email, subject, html)
+            flash('Email sent to: {}'.format(user.email))
+
+
+
             login_user(user, force=True)
-            #todo: create default event etc
-            # create_defaults(user.id)
             return redirect(url_for('index'))
 
     return render_template('signup.html', form=form, form2=form2)
@@ -630,6 +688,8 @@ def delete_account():
 
 @app.route('/reset', methods=["GET", "POST"])
 def reset():
+    logout_user()
+
     form = EmailForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first_or_404()
@@ -651,28 +711,35 @@ def reset():
 
         # Let's assume that send_email was defined in myapp/util.py
         send_email(user.email, subject, html)
-
+        flash('Email sent to: {}'.format(user.email))
         return redirect(url_for('index'))
     return render_template('reset.html', form=form)
 
 @app.route('/reset/<token>', methods=["GET", "POST"])
 def reset_with_token(token):
+
     try:
         email = ts.loads(token, salt="recover-key", max_age=86400)
     except:
         abort(404)
 
-    form = PasswordForm()
+    form = ChangePasswordForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=email).first_or_404()
 
-        user.password = form.password.data
+        if not form.password.data==form.repeatpassword.data:
+            flash("Passwords don't match!")
+        else:
+            user = User.query.filter_by(email=email).first_or_404()
 
-        db.session.add(user)
-        db.session.commit()
+            user.password = form.password.data
 
-        return redirect(url_for('signin'))
+            db.session.add(user)
+            db.session.commit()
+
+            login_user(user, force=True)
+            flash("Password changed!")
+            return redirect(url_for('index'))
 
     return render_template('reset_with_token.html', form=form, token=token)
 

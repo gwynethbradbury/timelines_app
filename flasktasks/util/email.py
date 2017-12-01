@@ -3,7 +3,9 @@ from flask import current_app, render_template
 from flask_mail import Mail, Message
 
 from flask_mail import Mail
-mail = Mail()
+# mail = Mail()
+
+from .. import mail
 
 def send_async_email(app, msg):
     with app.app_context():
@@ -14,8 +16,8 @@ def send_email(to, subject, template, **kwargs):
     app = current_app._get_current_object()
     msg = Message(app.config['AAAS_MAIL_SUBJECT_PREFIX'] + ' ' + subject,
                   sender=app.config['AAAS_MAIL_SENDER'], recipients=[to])
-    msg.body = render_template(template + '.txt', **kwargs)
-    msg.html = render_template(template + '.html', **kwargs)
+    msg.body = template#render_template(template + '.txt', **kwargs)
+    msg.html = template#render_template(template + '.html', **kwargs)
     thr = Thread(target=send_async_email, args=[app, msg])
     thr.start()
     return thr
