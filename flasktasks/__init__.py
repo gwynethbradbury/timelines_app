@@ -39,6 +39,11 @@ else:  # server
     app.config["AAAS_MAIL_SENDER"] = dbconfig.mail_sender
     app.config["MAIL_DEFAULT_SENDER"] = dbconfig.mail_sender
 
+
+
+
+
+
 mail = Mail()
 
 mail.init_app(app)
@@ -46,7 +51,37 @@ mail.init_app(app)
 
 
 db = SQLAlchemy(app)
+
+
 bcrypt = Bcrypt(app)
+
+
+# ADMIN
+
+if 1:#dbconfig.debug:
+    from flask_admin import Admin
+
+    from flask_admin.contrib.sqla import ModelView
+    from models import Book, Chapter, Event
+
+    # Flask and Flask-SQLAlchemy initialization here
+
+    admin = Admin(app, name='TIMELINES', template_mode='bootstrap3')
+
+    admin.add_view(ModelView(Book, db.session))
+    admin.add_view(ModelView(Chapter, db.session))
+    admin.add_view(ModelView(Event, db.session))
+    # admin.add_view(ModelView(User, db.session))
+    #
+    # class MyModelView(ModelView):
+    #     column_list = ('name', 'description','parent_id','parent.id')
+    #     column_display_pk = True
+    # admin.add_view(MyModelView(asset, db.session))
+
+
+
+
+
 
 import flasktasks.views
 import flasktasks.filters
