@@ -8,6 +8,18 @@ $("#delete-storyline").click(function() {
     return false;
 });
 
+
+$("#delete-chapter").click(function() {
+    http_delete($(this));
+    return false;
+});
+
+
+$("#delete-book").click(function() {
+    http_delete($(this));
+    return false;
+});
+
 function http_delete(element) {
     $.ajax({
         url: element.attr('href'),

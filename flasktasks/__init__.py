@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for, request, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
@@ -58,19 +58,50 @@ bcrypt = Bcrypt(app)
 
 # ADMIN
 
+
 if 1:#dbconfig.debug:
-    from flask_admin import Admin
+    from flask_admin import Admin, AdminIndexView
 
     from flask_admin.contrib.sqla import ModelView
     from models import Book, Chapter, Event
 
     # Flask and Flask-SQLAlchemy initialization here
+    from flask_login import current_user
 
-    admin = Admin(app, name='TIMELINES', template_mode='bootstrap3')
 
-    admin.add_view(ModelView(Book, db.session))
-    admin.add_view(ModelView(Chapter, db.session))
-    admin.add_view(ModelView(Event, db.session))
+    class MyAdminIndexView(AdminIndexView):
+        def is_accessible(self):
+            if hasattr(current_user,'email'):
+                if current_user.email == 'default' and \
+                        current_user.is_authenticated:
+                    return True
+            return False
+
+        def inaccessible_callback(self, name, **kwargs):
+            # redirect to login page if user doesn't have access
+            return redirect(url_for('signup', next=request.url))
+
+
+    class MyModelView(ModelView):
+        def is_accessible(self):
+            if hasattr(current_user,'email'):
+                if current_user.email == 'default' and \
+                        current_user.is_authenticated:
+                    return True
+            return False
+
+        def inaccessible_callback(self, name, **kwargs):
+            # redirect to login page if user doesn't have access
+            return redirect(url_for('signup', next=request.url))
+
+
+
+
+    admin = Admin(app, name='ADMIN', template_mode='bootstrap3',index_view=MyAdminIndexView())
+
+    admin.add_view(MyModelView(Book, db.session))
+    admin.add_view(MyModelView(Chapter, db.session))
+    admin.add_view(MyModelView(Event, db.session))
     # admin.add_view(ModelView(User, db.session))
     #
     # class MyModelView(ModelView):

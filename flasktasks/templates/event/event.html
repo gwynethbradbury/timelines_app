@@ -44,8 +44,13 @@
                 <a href="{{ url_for('set_status', event_id=event.id, status='doing') }}" class="btn btn-primary">Doing</a>
                 <a href="{{ url_for('set_status', event_id=event.id, status='done') }}" class="btn btn-success">Done</a>
             </div>
-            <div class="btn-group btn-group-justified" role="group">
-                <a href="{{ url_for('delete_event', event_id=event.id) }}" id="delete-event" class="btn btn-link"><span class="glyphicon glyphicon-trash"></span>Remove</a>
+        <br/>
+        <br/>
+            <div class="btn-group btn-group-centered" role="group">
+                <form method="POST">
+                    <button type="submit" class="btn btn-primary">Delete<span class="glyphicon glyphicon-trash"></span></button>
+                        <!--<a href="{{ url_for('delete_event', event_id=event.id, method=['DELETE']) }}" id="delete-event" class="btn btn-link"><span class="glyphicon glyphicon-trash"></span>Remove</a>-->
+                    </form>
             </div>
         </div>
     </div>

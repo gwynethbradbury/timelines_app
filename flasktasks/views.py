@@ -274,11 +274,20 @@ def edit_chapter(chapter_id):
     return render_template('chapter/edit.html', chapter=chapter, books=books)
 
 
-@app.route('/events/<int:event_id>')
+@app.route('/events/<int:event_id>', methods=['GET','POST'])
 def event(event_id):
     event = Event.query.get_or_404(event_id)
     if not event.user_id == current_user.id:
         abort(404)
+
+    if request.method == 'POST':
+        event = Event.query.get_or_404(event_id)
+        if not event.user_id == current_user.id:
+            abort(404)
+        db.session.delete(event)
+        db.session.commit()
+        return url_for('events')
+
     castmembers = Castmember.query.filter_by(user_id=current_user.id).all()
     storylines = Storyline.query.filter_by(user_id=current_user.id).all()
     chapters = Chapter.query.filter_by(user_id=current_user.id).all()

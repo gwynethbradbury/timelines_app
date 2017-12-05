@@ -175,6 +175,15 @@
                 <!--</form>-->
             </div>
         </nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-info">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
         {% block body %}{% endblock %}
 
 <!--<nav class="navbar fixed-bottom navbar-light bg-light"><a class="navbar-brand" href="#">Fixed bottom</a></nav>-->
