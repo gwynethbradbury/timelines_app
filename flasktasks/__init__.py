@@ -63,7 +63,7 @@ if 1:#dbconfig.debug:
     from flask_admin import Admin, AdminIndexView
 
     from flask_admin.contrib.sqla import ModelView
-    from models import Book, Chapter, Event
+    from models import Book, Chapter, Event, User
 
     # Flask and Flask-SQLAlchemy initialization here
     from flask_login import current_user
@@ -102,7 +102,7 @@ if 1:#dbconfig.debug:
     admin.add_view(MyModelView(Book, db.session))
     admin.add_view(MyModelView(Chapter, db.session))
     admin.add_view(MyModelView(Event, db.session))
-    # admin.add_view(ModelView(User, db.session))
+    admin.add_view(MyModelView(User, db.session))
     #
     # class MyModelView(ModelView):
     #     column_list = ('name', 'description','parent_id','parent.id')
