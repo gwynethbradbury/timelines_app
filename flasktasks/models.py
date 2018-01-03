@@ -70,7 +70,7 @@ class Book(db.Model):
     title = db.Column(db.String(100))
     synopsis = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
+    chapters = db.relationship('Chapter', backref='book', lazy='dynamic', order_by="Chapter.number")
 
     def __init__(self,title,synopsis,user_id):
         self.title=title
