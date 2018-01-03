@@ -48,7 +48,7 @@ def new_storyline():
 
 @app.route('/chapters', methods=['POST', 'GET'])
 def chapters():
-    chapters = Chapter.query.all()
+    chapters = Chapter.query.filter_by(user_id=current_user.id).all()
     return render_template('chapter/index.html',chapters=chapters)
 
 @app.route('/reorder_book_chapters/<book_id>', methods=['POST', 'GET'])
