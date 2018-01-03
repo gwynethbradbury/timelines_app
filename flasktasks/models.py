@@ -42,7 +42,7 @@ class Chapter(db.Model):
     synopsis = db.Column(db.Text)
     number = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    events = db.relationship('Event', backref='chapter', lazy='dynamic')
+    events = db.relationship('Event', backref='chapter', lazy='dynamic', order_by="Event.event_occurs_percent")
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=True)
 
 
