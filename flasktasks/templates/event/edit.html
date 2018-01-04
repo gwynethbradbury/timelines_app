@@ -55,7 +55,7 @@
                 </div>
                 <div class="form-group">
                     <!--<textarea name="description" class="form-control" rows="3" placeholder="Describe at will">{{ event.description }}</textarea>-->
-                    <textarea name="description" class="form-control" rows="3" placeholder="Describe at will" id="wysihtml5-textarea" autofocus>{{ event.description }}</textarea>
+                    <textarea name="description" class="form-control" rows="20" placeholder="Describe at will" id="wysihtml5-textarea">{{ event.description }}</textarea>
                 </div>
 
                 <!--<div class="form-group">-->
@@ -67,7 +67,7 @@
                     <!--</select>-->
                 <!--</div>-->
                 <div class="form-group">
-                    <select class="form-control" ="chapter_id">
+                    <select class="form-control" name="chapter_id">
                         <option value="-1" >Select a chapter</option>
                         {% for chapter in chapters %}
                             <option value="{{ chapter.id }}" {% if chapter.id==event.chapter_id %}selected="true"{% endif %} {{ chapter.id | is_selected }}>{{ chapter.title }}</option>
