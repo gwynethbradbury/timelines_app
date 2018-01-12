@@ -346,6 +346,7 @@ def edit_book(book_id):
     if request.method == 'POST':
         try:
             book.title = request.form.get('title')
+            book.synopsis= purge_divs(request.form.get('synopsis'))
         except KeyError:
             abort(400)
 
