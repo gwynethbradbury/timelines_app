@@ -24,20 +24,20 @@
 
         </div>
         <div class="col-sm-3 event-control">
-{#            <p>Assign event:</p>#}
-{#            <div class="btn-group btn-group-justified" role="group">#}
-{#                {% for c in castmembers %}#}
-{#                    <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=c.id) }}" class="btn btn-{{ loop.index0 % 6  }}">{{ c.initials }}</a>#}
-{#                {% endfor %}#}
-{#            </div>#}
-{#            <div class="btn-group btn-group-justified" role="group">#}
-{#                <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=-1) }}" class="btn btn-link">#}
-{#                    <span class="glyphicon glyphicon-trash"></span>#}
-{#                    Unassign</a>#}
-{#            </div>#}
-{#        </div>#}
-{##}
-{#        <div class="col-sm-3 task-control">#}
+            <p>Assign event:</p>
+            <div class="btn-group btn-group-justified" role="group">
+                {% for c in castmembers %}
+                    <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=c.id) }}" class="btn btn-{{ loop.index0 % 6  }}">{{ c.initials }}</a>
+                {% endfor %}
+            </div>
+            <div class="btn-group btn-group-justified" role="group">
+                <a href="{{ url_for('set_castmember', event_id=event.id, cast_id=-1) }}" class="btn btn-link">
+                    <span class="glyphicon glyphicon-trash"></span>
+                    Unassign</a>
+            </div>
+        <!--</div>-->
+
+        <!--<div class="col-sm-3 task-control">-->
             <p>Set Status:</p>
             <div class="btn-group btn-group-justified" role="group">
                 <a href="{{ url_for('set_status', event_id=event.id, status='to_do') }}" class="btn btn-warning">To do</a>

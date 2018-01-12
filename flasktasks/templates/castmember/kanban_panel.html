@@ -7,7 +7,7 @@
             {% for event in events[status] %}
                 <a href="{{ url_for('event', event_id=event.id) }}" class="list-group-item {{ event.storyline.tag.style() }}">
                     <h4 class="list-group-item-heading">{{ event.title }}</h4>
-                    <p class="list-group-item-text">{{ event.description }}</p>
+                    <p class="list-group-item-text">{{ event.description[:200]|safe }}{% if event.description|length>200 %}...{% endif %}</p>
                     <p class="color-{{ event.castmember.initials }}"><i>{{ event.castmember.initials }}</i></p>
                     <p class="color-{{ event.castmember.initials }}"><i>{{ event.castmember.initials }}</i></p>
                 </a>

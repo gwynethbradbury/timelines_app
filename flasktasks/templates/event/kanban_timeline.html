@@ -18,7 +18,7 @@
                     <a href="{{ url_for('event', event_id=event.id) }}" class="list-group-item  {{ castmember.style() }}" style="width:300px;">
                         <h5>Chapter: {% if event.chapter %}{{event.chapter.title}}{% else %}<i>no chapter</i>{% endif %} </h5>
                     <h4 class="list-group-item-heading">{{ event.title }}</h4>
-                    <p class="list-group-item-text">{{ event.description[:500] |safe}}{% if event.description|length>500 %}...{% endif %}</p>
+                    <p class="list-group-item-text">{{ event.description[:200]|safe }}{% if event.description|length>200 %}...{% endif %}</p>
                     <br/>
 {#                    <p>{% for c in event.cast %}<span class="color-{{ c.initials }}"> <i>{{ c.initials }}</i> </span>  {% endfor %}</p>#}
                     <p>{% for c in event.cast %}<div class="color-{{ c.initials }}" style="border-radius: 50%;width: 25px;height: 25px;background-color: #c7ddef;text-align: center; padding-top: 5px; display: inline-block">{{ c.initials }}</div>  {% endfor %}</p>

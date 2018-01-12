@@ -15,6 +15,9 @@ import datetime
 # class Castmember():
 #     pass
 
+def purge_divs(text):
+    return text.replace('<div>','')
+
 class Status(Enum):
     TO_DO = 1
     DOING = 2
@@ -65,6 +68,9 @@ class Chapter(db.Model):
         else:
             return "tagged tag-grey"
 
+    def __repr__(self):
+        return self.title
+
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -86,6 +92,9 @@ class Book(db.Model):
         for chapter in self.chapters:
             c=c+chapter.wordcount()
         return c
+
+    def __repr__(self):
+        return self.title
 
 
 class EventChar(db.Model):
@@ -136,6 +145,9 @@ class Event(db.Model):
         c = self.description.split().__len__()
         return c
 
+    def __repr__(self):
+        return "{} ({}: {})".format(self.title,self.chapter.title, self.event_occurs_percent)
+
 
 class Storyline(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -177,6 +189,8 @@ class Castmember(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    def __repr__(self):
+        return "{} ({})".format(self.name,self.initials)
 
     def __init__(self, user_id, name="Unassigned", initials="U", color=Color.GREY):
         self.name = name

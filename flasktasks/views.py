@@ -3,6 +3,7 @@ from collections import defaultdict
 from flasktasks import app, db
 from flasktasks.models import Storyline, Event, Status, Tag, Color, CastmemberColor, Castmember, LogEntry, EventChar, Chapter, Book
 from flasktasks.signals import event_created, storyline_created, castmember_created, chapter_created, book_created
+from flasktasks.models import purge_divs
 
 from flask_login import current_user
 @app.route('/')
@@ -221,7 +222,7 @@ def new_event():
         else:
             occurs_percent=0
         event = Event(user_id=current_user.id, title=request.form.get('title'),
-                    description=request.form.get('description'),
+                    description=purge_divs(request.form.get('description')),
                     storyline_id=request.form.get('storyline_id'),
                     castmember_id=request.form.get('castmember_id'),
                     chapter_id=request.form.get('chapter_id'),
@@ -282,11 +283,14 @@ def event(event_id):
 
     if request.method == 'POST':
         event = Event.query.get_or_404(event_id)
+        chapter_id = event.chapter_id
         if not event.user_id == current_user.id:
             abort(404)
         db.session.delete(event)
         db.session.commit()
-        return url_for('events')
+        if chapter_id>0:
+            return redirect('/chapters/{}'.format(chapter_id))
+        return redirect('/events')
 
     castmembers = Castmember.query.filter_by(user_id=current_user.id).all()
     storylines = Storyline.query.filter_by(user_id=current_user.id).all()
@@ -305,11 +309,10 @@ def edit_event(event_id):
     storylines = Storyline.query.filter_by(user_id=current_user.id).all()
     chapters = Chapter.query.filter_by(user_id=current_user.id).all()
 
-
     if request.method == 'POST':
         try:
             event.title = request.form.get('title')
-            event.description = request.form.get('description')
+            event.description = purge_divs(request.form.get('description'))
             # event.storyline_id = request.form.get('storyline_id')
             if not request.form.get('chapter_id')=='-1':
                 event.chapter_id = request.form.get('chapter_id')
@@ -323,6 +326,7 @@ def edit_event(event_id):
         return redirect(url_for('event',event_id=event.id))
 
     return render_template('event/edit.html', event=event, castmembers=castmembers, storylines=storylines,chapters=chapters)
+
 
 @app.route('/book/<int:book_id>')
 def book(book_id):
@@ -396,11 +400,14 @@ def set_castmember(event_id, cast_id):
 @app.route('/events/<int:event_id>', methods=['DELETE'])
 def delete_event(event_id):
     event = Event.query.get_or_404(event_id)
+    chapter_id = event.chapter_id
     if not event.user_id == current_user.id:
         abort(404)
     db.session.delete(event)
     db.session.commit()
-    return url_for('event')
+    if chapter_id>0:
+        return redirect('/chapters/{}'.format(chapter_id))
+    return redirect('/events')
 
 @app.route('/events/<int:event_id>')
 def unassign_castmember(event_id):

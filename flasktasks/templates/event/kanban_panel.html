@@ -7,7 +7,7 @@
             {% for event in events[status]|sort(attribute='chapter_id') %}
                 <a href="{{ url_for('event', event_id=event.id) }}" class="list-group-item {{ event.style() }}">
                     <h4 class="list-group-item-heading">{{ event.title }} {{ event.event_occurs_percent }}</h4>
-                    <p class="list-group-item-text">{{ event.description|safe }}</p>
+                    <p class="list-group-item-text">{{ event.description[:200]|safe }}{% if event.description|length>200 %}...{% endif %}</p>
                     <br/>
 {#                    <p>{% for c in event.cast %}<span class="color-{{ c.initials }}"> <i>{{ c.initials }}</i> </span>  {% endfor %}</p>#}
 {#                    <p>{% for c in event.cast %}<div class="color-{{ c.initials }}" style="border-radius: 50%;width: 25px;height: 25px;background-color: #c7ddef;text-align: center; padding-top: 5px; display: inline-block">{{ c.initials }}</div>  {% endfor %}</p>#}

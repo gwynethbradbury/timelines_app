@@ -1,4 +1,10 @@
 {% extends "base.html" %}
+{% block additionalscripts %}
+    <!-- wysihtml5 parser rules -->
+    <script src="{{ url_for('static',filename='wysihtml5/parser_rules/advanced.js') }}"></script>
+    <!-- Library -->
+    <script src="{{ url_for('static',filename='wysihtml5/dist/wysihtml5-0.3.0.min.js') }}"></script>
+{% endblock %}
 {% block body %}
 <div class="container">
     <div class="page-header">
@@ -9,8 +15,13 @@
         <div class="form-group">
             <input name="title" type="text" class="form-control" placeholder="What must be done?" required>
         </div>
+        <div id="wysihtml5-toolbar" style="display: none;">
+            <a data-wysihtml5-command="bold" class="btn btn-info"><strong>B</strong></a>
+            <a data-wysihtml5-command="italic" class="btn btn-info"><i>I</i></a>
+
+        </div>
         <div class="form-group">
-            <textarea name="description" class="form-control" rows="3" placeholder="Describe at will"></textarea>
+            <textarea name="description" class="form-control" rows="20" placeholder="Describe at will" id="wysihtml5-textarea"></textarea>
         </div>
         
         <!--<div class="form-group">-->
@@ -48,4 +59,12 @@
     </form>
 
 </div>
+
+
+<script>
+var editor = new wysihtml5.Editor("wysihtml5-textarea", { // id of textarea element
+  toolbar:      "wysihtml5-toolbar", // id of toolbar element
+  parserRules:  wysihtml5ParserRules // defined in parser rules set
+});
+</script>
 {% endblock %}
